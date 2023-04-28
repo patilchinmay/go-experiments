@@ -1,3 +1,6 @@
 go 1.20
 
-use ./hello
+use (
+	./go-chi-server
+	./hello
+)
