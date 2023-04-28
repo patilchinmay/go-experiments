@@ -1,0 +1,48 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: check-added-large-files
+
+  # Golang
+  - repo: https://github.com/dnephin/pre-commit-golang
+    rev: v0.5.1
+    hooks:
+      - id: go-fmt
+      # - id: go-vet
+      - id: go-imports
+      # - id: golangci-lint
+      - id: go-cyclo
+        args: [-over=30]
+
+  # Security
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.16.3
+    hooks:
+      - id: gitleaks
+
+  # Yaml [To be activated later]
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.31.0
+    hooks:
+      - id: yamllint
+        args:
+          - "--no-warnings"
+          - "-d {rules: {line-length: {max: 80, level: warning}},extends: default}"
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.4
+    hooks:
+      - id: codespell
