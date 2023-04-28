@@ -38,12 +38,13 @@ Pong%
 - [x] HTTP Request Logging (httplog)
 - [x] Configurable app logging (zerolog)
 - [ ] Explanantory comments and godoc
+- [ ] Input parameter validation/sanitization
+- [ ] Context
 - [ ] Passing request id end-to-end in the form of `X-Correlation-ID` header
 - [ ] Interrupt signal handling
 - [ ] Injectable config for logging env
 - [ ] Database/ORM/Repository Layer
 - [ ] JSON handling
-- [ ] Context
 - [ ] Tests
 - [ ] Load Testing
 - [ ] UML diagram
