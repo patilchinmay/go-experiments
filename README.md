@@ -20,7 +20,7 @@ Most likely each repository will build on top of the previous one, unless mentio
    - [x] HTTP Request Logging (`httplog`)
    - [x] Configurable app logging (`zerolog`)
    - [x] Loads environment variables from `.env` file (`godotenv`)
-   - [ ] Interrupt signal handling
+   - [x] Interrupt signal handling
    - [ ] Tests and how to run them (`ginkgo, gomega`)
    - [ ] Explanantory comments and godoc
 
@@ -31,10 +31,12 @@ Most likely each repository will build on top of the previous one, unless mentio
 - [ ] Config loading
 - [ ] Input parameter validation/sanitization
 - [ ] Context parameter
+- [ ] Middlewares
 - [ ] Passing request id end-to-end in the form of `X-Correlation-ID` header
 - [ ] Injectable config for logging env
 - [ ] Database/ORM/Repository Layer
 - [ ] JSON handling
+- [ ] Route Versioning
 - [ ] Tests
 - [ ] Load Testing
 - [ ] UML diagram
