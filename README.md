@@ -4,9 +4,13 @@ This repository is a [go workspace](https://go.dev/doc/tutorial/workspaces) for 
 
 # How to read/understand this?
 
-The repositories are numbered. Each one has a README.md with description, relevant details to setup and run. Most likely each repository will build on top of the previous one, unless mentioned otherwise.
+Basic familiarity of golang and backend development is assumed.
 
-# ToC
+The repositories are numbered. Each one has a README.md with description, relevant details to setup and run.
+
+Most likely each repository will build on top of the previous one, unless mentioned otherwise.
+
+# Table of Contents
 
 1. [hello](./hello/)
    - [x] Verify that setup works with a hello world application.
@@ -16,15 +20,17 @@ The repositories are numbered. Each one has a README.md with description, releva
    - [x] HTTP Request Logging (`httplog`)
    - [x] Configurable app logging (`zerolog`)
    - [x] Loads environment variables from `.env` file (`godotenv`)
+   - [ ] Interrupt signal handling
+   - [ ] Tests and how to run them (`ginkgo, gomega`)
+   - [ ] Explanantory comments and godoc
+
 3.
 
 # Possible Improvements
 
-- [ ] Explanantory comments and godoc
-- [ ] Interrupt signal handling
-- [ ] Config Loading
+- [ ] Config loading
 - [ ] Input parameter validation/sanitization
-- [ ] Context
+- [ ] Context parameter
 - [ ] Passing request id end-to-end in the form of `X-Correlation-ID` header
 - [ ] Injectable config for logging env
 - [ ] Database/ORM/Repository Layer
