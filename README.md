@@ -20,7 +20,7 @@ Most likely each repository will build on top of the previous one, unless mentio
    - [x] HTTP Request Logging (`httplog`)
    - [x] Configurable app logging (`zerolog`)
    - [x] Loads environment variables from `.env` file (`godotenv`)
-   - [x] Interrupt signal handling
+   - [x] Graceful Shutdown / OS Interrupt signal handling
    - [ ] Tests and how to run them (`ginkgo, gomega`)
    - [ ] Explanantory comments and godoc
 
