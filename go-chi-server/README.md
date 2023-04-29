@@ -4,10 +4,7 @@ This is a basic go server written with go-chi.
 
 Contains:
 
-- [x] Basic Go-chi Server (BCS)
-- [x] Separation of App and Server
-- [x] HTTP Request Logging (httplog)
-- [x] Configurable app logging (zerolog)
+Please see (README.md)[../README.md] from parent folder.
 
 # Setup
 

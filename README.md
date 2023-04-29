@@ -9,12 +9,13 @@ The repositories are numbered. Each one has a README.md with description, releva
 # ToC
 
 1. [hello](./hello/)
-   - [x] verify that setup works
+   - [x] Verify that setup works with a hello world application.
 2. [go-chi-server](./go-chi-server/)
    - [x] Basic Go-chi Server (BCS)
    - [x] Separation of App and Server
    - [x] HTTP Request Logging (httplog)
    - [x] Configurable app logging (zerolog)
+   - [x] Loads environment variables from `.env` file (godotenv)
 3.
 
 # Possible Improvements
