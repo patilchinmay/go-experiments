@@ -8,9 +8,9 @@ The repositories are numbered. Each one has a README.md with description, releva
 
 # ToC
 
-0. [hello](./hello/README.md)
+1. [hello](./hello/)
    - [x] verify that setup works
-2. [go-chi-server](./go-chi-server/README.md)
+2. [go-chi-server](./go-chi-server/)
    - [x] Basic Go-chi Server (BCS)
    - [x] Separation of App and Server
    - [x] HTTP Request Logging (httplog)
