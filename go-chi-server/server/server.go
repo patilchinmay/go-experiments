@@ -13,13 +13,16 @@ import (
 )
 
 // Why struct?
-//
+// It is the not necessary to use struct, but it helps to use it.
+// Since it helps encapsulate the methods required for server's operation.
 // Why accept logger?
+// Dependency inversion. It is easier to pass a main logger from the main function.
 type Server struct {
 	logger zerolog.Logger
 }
 
 // Why create constructor?
+// We can add validation checks and other necessary logic here down the line.
 func New(
 	logger zerolog.Logger,
 ) *Server {
@@ -86,10 +89,6 @@ func (s *Server) Serve() {
 		logger.Fatal().Err(err).Msg("Server shutdown failed")
 	}
 	logger.Info().Msg("Server exited properly")
-}
-
-func (s *Server) Shutdown() {
-
 }
 
 func (s *Server) getPort() string {
