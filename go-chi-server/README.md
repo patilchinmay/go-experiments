@@ -1,3 +1,14 @@
+# Description
+
+This is a basic go server written with go-chi.
+
+Contains:
+
+- [x] Basic Go-chi Server (BCS)
+- [x] Separation of App and Server
+- [x] HTTP Request Logging (httplog)
+- [x] Configurable app logging (zerolog)
+
 # Setup
 
 ```bash
@@ -31,20 +42,3 @@ go mod tidy
 ❯ curl localhost:8080/ping
 Pong%
 ```
-
-# Improvement Checklist
-
-- [x] Separate app and server
-- [x] HTTP Request Logging (httplog)
-- [x] Configurable app logging (zerolog)
-- [ ] Explanantory comments and godoc
-- [ ] Input parameter validation/sanitization
-- [ ] Context
-- [ ] Passing request id end-to-end in the form of `X-Correlation-ID` header
-- [ ] Interrupt signal handling
-- [ ] Injectable config for logging env
-- [ ] Database/ORM/Repository Layer
-- [ ] JSON handling
-- [ ] Tests
-- [ ] Load Testing
-- [ ] UML diagram

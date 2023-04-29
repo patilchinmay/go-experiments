@@ -1,3 +1,8 @@
+# Description
+
+This is a hello-world app.
+It is here to make sure that the setup is working.
+
 # Setup
 
 ```bash
