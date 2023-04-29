@@ -1,7 +1,8 @@
 # Description
 
 This is a hello-world app.
-It is here to make sure that the setup is working.
+
+It is to make sure that the setup is working.
 
 # Setup
 
