@@ -4,7 +4,7 @@ This is a basic go server written with go-chi.
 
 Contains:
 
-Please see [README.md](../README.md) from parent folder.
+Please see [README.md](../README.md#toc) from parent folder.
 
 # Setup
 
