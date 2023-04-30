@@ -21,6 +21,8 @@ Most likely each repository will build on top of the previous one, unless mentio
    - [x] Configurable app logging (`zerolog`)
    - [x] Loads environment variables from `.env` file (`godotenv`)
    - [x] Graceful Shutdown / OS Interrupt signal handling
+   - [ ] `main` handles OS interrupts
+   - [ ] Builder pattern for server creation with different methods such as setTimeout
    - [ ] Tests and how to run them (`ginkgo, gomega`)
    - [ ] Explanantory comments and godoc
 
