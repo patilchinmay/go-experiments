@@ -22,6 +22,8 @@ type Server struct {
 }
 
 // Why create constructor?
+// https://web3.coach/golang-why-you-should-use-constructors
+// Make refactoring much easier down the line. We can add sensible defaults here.
 // We can add validation checks and other necessary logic here down the line.
 func New(
 	logger zerolog.Logger,
@@ -58,7 +60,10 @@ func (s *Server) Serve() {
 		logger.Info().Msg("Listening")
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			// Error starting or closing listener
-			logger.Error().Err(err).Msg("Failed to listen and serve")
+			// using Fatal makes sure that the program exits with a status code os.Exit(1) (e.g. when the port is already in use)
+			// this helps docker/k8s know that the program is unhealthy and it can take further actions such as restarting the container
+			// e.g. when a port is in use, we would like the program to exit fast rather than existing without doing anything
+			logger.Fatal().Err(err).Msg("Failed to listen and serve")
 		} else {
 			// This block is only executed when the blocking function
 			// ListenAndServe stops and the server is close (ErrServerClosed)
