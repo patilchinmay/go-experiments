@@ -52,6 +52,7 @@ func (s *Server) Serve() {
 		// e.g. when a port is in use, we would like the program to exit fast rather than existing without doing anything
 		s.logger.Fatal().Err(err).Msg("Failed to listen and serve")
 	} else {
+		// TODO: Why is this not printed when Ctrl+C is pressed ?
 		s.logger.Info().Msg("Server stopped listening")
 	}
 }
