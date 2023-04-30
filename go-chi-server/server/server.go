@@ -19,6 +19,7 @@ import (
 // Dependency inversion. It is easier to pass a main logger from the main function.
 type Server struct {
 	logger zerolog.Logger
+	server http.Server
 }
 
 // Why create constructor?
@@ -28,7 +29,9 @@ type Server struct {
 func New(
 	logger zerolog.Logger,
 ) *Server {
-	return &Server{logger: logger}
+	return &Server{logger: logger,
+		server: http.Server{},
+	}
 }
 
 func (s *Server) Serve() {
@@ -37,18 +40,21 @@ func (s *Server) Serve() {
 	// We should be capable of catching signal as soon as the program starts
 	// https://henvic.dev/posts/signal-notify-context/
 	// https://millhouse.dev/posts/graceful-shutdowns-in-golang-with-signal-notify-context
+	// TODO: Move interrupt handling to main
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
 	logger := s.logger
+	server := s.server
+
 	port := s.getPort()
 	host := s.getHost()
 
-	server := http.Server{
-		Addr:        host + ":" + port,
-		ReadTimeout: 5 * time.Second,
-		Handler:     app.New(logger).CreateApp(),
-	}
+	// TODO: We can move these into separate functions (and create a builder paattern)
+	server.Addr = host + ":" + port
+	server.ReadTimeout = 5 * time.Second
+	server.Handler = app.New(logger).CreateApp()
+
 	logger = logger.With().Str("Addr", server.Addr).Logger()
 
 	// Starting server
@@ -90,6 +96,7 @@ func (s *Server) Serve() {
 	defer cancel()
 
 	// shutdown
+	// TODO: Move shutdown into its own function
 	if err := server.Shutdown(shutdownTimeoutCtx); err != nil {
 		logger.Fatal().Err(err).Msg("Server shutdown failed")
 	}
