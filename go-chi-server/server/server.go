@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"os"
-	"os/signal"
 	"time"
 
 	"github.com/rs/zerolog"
@@ -35,58 +34,32 @@ func New(
 }
 
 func (s *Server) Serve() {
-	// Create context that listens for the interrupt signal from the OS.
-	// We do this before everything else as
-	// We should be capable of catching signal as soon as the program starts
-	// https://henvic.dev/posts/signal-notify-context/
-	// https://millhouse.dev/posts/graceful-shutdowns-in-golang-with-signal-notify-context
-	// TODO: Move interrupt handling to main
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer stop()
-
-	logger := s.logger
 	server := s.server
 
 	port := s.getPort()
 	host := s.getHost()
 
-	// TODO: We can move these into separate functions (and create a builder paattern)
+	// TODO: We can move these into separate functions (and use a builder paattern)
 	server.Addr = host + ":" + port
 	server.ReadTimeout = 5 * time.Second
-	server.Handler = app.New(logger).CreateApp()
+	server.Handler = app.New(s.logger).CreateApp()
 
-	logger = logger.With().Str("Addr", server.Addr).Logger()
+	s.logger.Info().Str("Addr", server.Addr).Msg("Listening")
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		// Error starting or closing listener
+		// using Fatal makes sure that the program exits with a status code os.Exit(1) (e.g. when the port is already in use)
+		// this helps docker/k8s know that the program is unhealthy and it can take further actions such as restarting the container
+		// e.g. when a port is in use, we would like the program to exit fast rather than existing without doing anything
+		s.logger.Fatal().Err(err).Msg("Failed to listen and serve")
+	} else {
+		s.logger.Info().Msg("Server stopped listening")
+	}
+}
 
-	// Starting server
-	// The server is started on a separate goroutine
-	// ListenAndServe is a blocking function,
-	// It fields all incoming requests on separate goroutine
-	// https://medium.com/honestbee-tw-engineer/gracefully-shutdown-in-go-http-server-5f5e6b83da5a
-	go func() {
-		logger.Info().Msg("Listening")
-		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			// Error starting or closing listener
-			// using Fatal makes sure that the program exits with a status code os.Exit(1) (e.g. when the port is already in use)
-			// this helps docker/k8s know that the program is unhealthy and it can take further actions such as restarting the container
-			// e.g. when a port is in use, we would like the program to exit fast rather than existing without doing anything
-			logger.Fatal().Err(err).Msg("Failed to listen and serve")
-		} else {
-			// This block is only executed when the blocking function
-			// ListenAndServe stops and the server is close (ErrServerClosed)
-			logger.Info().Msg("Server shutdown successfully")
-		}
-	}()
-
-	// Block main goroutine to wait for receiving interrupt signal
-	<-ctx.Done()
-
-	// Received interrupt signal. Proceed to graceful shutdown
-	// stop()
-	logger.Info().Msg("Shutting down gracefully")
-
+func (s *Server) Shutdown() {
 	// Timeout for graceful shutdown
-	// Why need a timeout context?
-	// srv.Shutdown does not interrupt active coonections.
+	// Why do we need a timeout context?
+	// server.Shutdown does not interrupt active coonections.
 	// It works by first closing all open listeners, then closing all idle connections,
 	// and then **waiting indefinitely** for active connections to return to idle and then shut down.
 	// If the provided context expires before the shutdown is complete,
@@ -96,11 +69,10 @@ func (s *Server) Serve() {
 	defer cancel()
 
 	// shutdown
-	// TODO: Move shutdown into its own function
-	if err := server.Shutdown(shutdownTimeoutCtx); err != nil {
-		logger.Fatal().Err(err).Msg("Server shutdown failed")
+	if err := s.server.Shutdown(shutdownTimeoutCtx); err != nil {
+		s.logger.Fatal().Err(err).Msg("Server shutdown failed")
 	}
-	logger.Info().Msg("Server exited properly")
+	s.logger.Info().Msg("Server exited properly")
 }
 
 func (s *Server) getPort() string {
