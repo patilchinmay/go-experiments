@@ -39,3 +39,26 @@ go mod tidy
 ❯ curl localhost:8080/ping
 Pong%
 ```
+
+# Testing
+
+## required utilities for testing
+
+Install `godotenv, ginkgo and gomega`
+https://onsi.github.io/ginkgo/
+
+```bash
+go install github.com/joho/godotenv/cmd/godotenv
+go install github.com/onsi/ginkgo/v2/ginkgo
+go get github.com/onsi/gomega/...
+```
+
+## run tests
+
+`make test`
+
+OR
+
+`godotenv -f ./.env ginkgo -v -r --cover`
+
+To check coverage via HTML: `go tool cover -html=coverprofile.out`
