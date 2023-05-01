@@ -14,8 +14,13 @@ type App struct {
 	logger zerolog.Logger
 }
 
-func New(logger zerolog.Logger) *App {
-	return &App{logger: logger}
+func New() *App {
+	return &App{}
+}
+
+func (a *App) WithLogger(logger zerolog.Logger) *App {
+	a.logger = logger
+	return a
 }
 
 func (a *App) Ping(w http.ResponseWriter, r *http.Request) {

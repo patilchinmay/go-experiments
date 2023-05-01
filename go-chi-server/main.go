@@ -5,9 +5,11 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"time"
 
 	"github.com/go-chi/httplog"
 	"github.com/joho/godotenv"
+	"github.com/patilchinmay/go-experiments/go-chi-server/app"
 	"github.com/patilchinmay/go-experiments/go-chi-server/server"
 )
 
@@ -57,8 +59,12 @@ func main() {
 		},
 	})
 
+	// Create app with routes handlers
+	app := app.New().WithLogger(logger).CreateApp()
+
 	// Create server
-	server := server.New(logger)
+	server := server.New().WithLogger(logger).WithReadTimeout(5 * time.Second).WithHandlers(app)
+
 	// The server is started on a separate goroutine as
 	// ListenAndServe is a blocking function,
 	// It fields all incoming requests on separate goroutine

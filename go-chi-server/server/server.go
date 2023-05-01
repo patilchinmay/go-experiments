@@ -7,8 +7,6 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
-
-	"github.com/patilchinmay/go-experiments/go-chi-server/app"
 )
 
 // Why struct?
@@ -18,6 +16,8 @@ import (
 // Dependency inversion. It is easier to pass a main logger from the main function.
 type Server struct {
 	logger zerolog.Logger
+	host   string
+	port   string
 	server http.Server
 }
 
@@ -25,38 +25,64 @@ type Server struct {
 // https://web3.coach/golang-why-you-should-use-constructors
 // Make refactoring much easier down the line. We can add sensible defaults here.
 // We can add validation checks and other necessary logic here down the line.
-func New(
-	logger zerolog.Logger,
-) *Server {
-	return &Server{logger: logger,
+func New() *Server {
+	s := &Server{
 		server: http.Server{},
 	}
+	s.host = s.setDefaultHost()
+	s.port = s.setDefaultPort()
+
+	return s
 }
 
+// WithLogger sets the logger using builder pattern
+func (s *Server) WithLogger(logger zerolog.Logger) *Server {
+	s.logger = logger
+	return s
+}
+
+// WithHandlers sets the route handlers using builder pattern
+func (s *Server) WithHandlers(app http.Handler) *Server {
+	s.server.Handler = app
+	return s
+}
+
+// WithReadTimeout sets the read timeout for server using builder pattern
+func (s *Server) WithReadTimeout(duration time.Duration) *Server {
+	s.server.ReadTimeout = duration
+	return s
+}
+
+// WithHost sets the server host address using builder pattern
+func (s *Server) WithHost(host string) *Server {
+	s.host = host
+	return s
+}
+
+// WithPort sets the server port using builder pattern
+func (s *Server) WithPort(port string) *Server {
+	s.port = port
+	return s
+}
+
+// Serve servers requests on the mentioned host and port
 func (s *Server) Serve() {
-	server := s.server
 
-	port := s.getPort()
-	host := s.getHost()
+	s.server.Addr = s.host + ":" + s.port
 
-	// TODO: We can move these into separate functions (and use a builder paattern)
-	server.Addr = host + ":" + port
-	server.ReadTimeout = 5 * time.Second
-	server.Handler = app.New(s.logger).CreateApp()
-
-	s.logger.Info().Str("Addr", server.Addr).Msg("Listening")
-	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+	s.logger.Info().Str("Addr", s.server.Addr).Msg("Listening")
+	if err := s.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		// Error starting or closing listener
 		// using Fatal makes sure that the program exits with a status code os.Exit(1) (e.g. when the port is already in use)
 		// this helps docker/k8s know that the program is unhealthy and it can take further actions such as restarting the container
 		// e.g. when a port is in use, we would like the program to exit fast rather than existing without doing anything
 		s.logger.Fatal().Err(err).Msg("Failed to listen and serve")
 	} else {
-		// TODO: Why is this not printed when Ctrl+C is pressed ?
 		s.logger.Info().Msg("Server stopped listening")
 	}
 }
 
+// Shutdown shuts down the server with a timeout of 5 seconds
 func (s *Server) Shutdown() {
 	// Timeout for graceful shutdown
 	// Why do we need a timeout context?
@@ -76,24 +102,20 @@ func (s *Server) Shutdown() {
 	s.logger.Info().Msg("Server exited properly")
 }
 
-func (s *Server) getPort() string {
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		port = "8080"
-	}
-	s.logger.Info().Str("PORT", port).Msg("Deploying webhook")
-
-	return port
-}
-
-func (s *Server) getHost() string {
+// setDefaultHost sets the default host to 0.0.0.0 if HOST env var is not found
+func (s *Server) setDefaultHost() string {
 	host := os.Getenv("HOST")
-
 	if host == "" {
 		host = "0.0.0.0"
 	}
-	s.logger.Info().Str("HOST", host).Msg("Deploying webhook")
-
 	return host
+}
+
+// setDefaultPort sets the default port to 8080 is PORT env var is not found
+func (s *Server) setDefaultPort() string {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	return port
 }
