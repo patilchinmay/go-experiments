@@ -8,8 +8,6 @@ Please see [README.md](../README.md#toc) from parent folder.
 
 # Key and Certificate creation
 
-Ref:
-
 ```bash
 cd certs
 
