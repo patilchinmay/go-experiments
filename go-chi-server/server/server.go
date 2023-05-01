@@ -9,6 +9,11 @@ import (
 	"github.com/rs/zerolog"
 )
 
+const (
+	DefaultHost = "0.0.0.0"
+	DefaultPort = "8080"
+)
+
 // Why struct?
 // It is the not necessary to use struct, but it helps to use it.
 // Since it helps encapsulate the methods required for server's operation.
@@ -102,20 +107,20 @@ func (s *Server) Shutdown() {
 	s.logger.Info().Msg("Server exited properly")
 }
 
-// setDefaultHost sets the default host to 0.0.0.0 if HOST env var is not found
+// setDefaultHost sets the default host to "0.0.0.0" if HOST env var is not set
 func (s *Server) setDefaultHost() string {
 	host := os.Getenv("HOST")
 	if host == "" {
-		host = "0.0.0.0"
+		host = DefaultHost
 	}
 	return host
 }
 
-// setDefaultPort sets the default port to 8080 is PORT env var is not found
+// setDefaultPort sets the default port to "8080" is PORT env var is not set
 func (s *Server) setDefaultPort() string {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = DefaultPort
 	}
 	return port
 }
