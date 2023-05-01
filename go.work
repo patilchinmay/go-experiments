@@ -3,4 +3,5 @@ go 1.20
 use (
 	./go-chi-server
 	./hello
+	./https-serving
 )
