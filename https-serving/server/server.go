@@ -131,7 +131,7 @@ func (s *Server) Shutdown() {
 	s.logger.Info().Msg("Server exited properly")
 }
 
-// setDefaultHost sets the default host to "127.0.0.1" if HOST env var is not set
+// setDefaultHost sets the default host to "0.0.0.0" if HOST env var is not set
 func (s *Server) setDefaultHost() string {
 	host := os.Getenv("HOST")
 	if host == "" {
