@@ -27,8 +27,8 @@ Most likely each repository will build on top of the previous one, unless mentio
    - [x] Explanantory comments and godoc
 
 3. [https-serving](./https-serving)
-   - [ ]  Base [go-chi-server](./go-chi-server/)
-   - [ ]  HTTPS serving
+   - [x]  Base [go-chi-server](./go-chi-server/)
+   - [x]  HTTPS serving
 
 # Possible Improvements
 
