@@ -22,11 +22,13 @@ Most likely each repository will build on top of the previous one, unless mentio
    - [x] Loads environment variables from `.env` file (`godotenv`)
    - [x] Graceful Shutdown / OS Interrupt signal handling
    - [x] `main` handles OS interrupts
-   - [ ] Builder pattern for server creation with different methods such as setTimeout
-   - [ ] Tests and how to run them (`ginkgo, gomega`)
-   - [ ] Explanantory comments and godoc
+   - [x] Builder pattern for server creation with different methods such as `WithHost, WithPort etc.`
+   - [x] Tests and how to run them (`ginkgo, gomega`)
+   - [x] Explanantory comments and godoc
 
-3.
+3. [https-serving](./https-serving)
+   - [ ]  Base [go-chi-server](./go-chi-server/)
+   - [ ]  HTTPS serving
 
 # Possible Improvements
 
