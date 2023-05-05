@@ -7,12 +7,15 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
+	"github.com/sethvargo/go-envconfig"
 )
 
-const (
-	DefaultHost = "0.0.0.0"
-	DefaultPort = "8080"
-)
+type ServerConfig struct {
+	Host        string        `env:"HOST,overwrite,default=0.0.0.0"`
+	Port        string        `env:"PORT,overwrite,default=8080"`
+	ReadTimeout time.Duration `env:"READ_TIMEOUT,overwrite,default=5s"`
+	// HTTPS       bool          `env:"HTTPS,required"`
+}
 
 // Why struct?
 // It is the not necessary to use struct, but it helps to use it.
@@ -20,22 +23,35 @@ const (
 // Why accept logger?
 // Dependency inversion. It is easier to pass a main logger from the main function.
 type Server struct {
+	*ServerConfig
 	logger zerolog.Logger
-	host   string
-	port   string
 	server http.Server
 }
 
 // Why create constructor?
 // https://web3.coach/golang-why-you-should-use-constructors
-// Make refactoring much easier down the line. We can add sensible defaults here.
+// Makes refactoring much easy down the line. We can add sensible defaults here.
 // We can add validation checks and other necessary logic here down the line.
 func New() *Server {
-	s := &Server{
-		server: http.Server{},
+	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
+
+	// Initialize server config
+	serverConfig := &ServerConfig{}
+
+	// Set defaults with env vars
+	// Uses https://github.com/sethvargo/go-envconfig
+	if err := envconfig.Process(context.Background(), serverConfig); err != nil {
+		logger.Fatal().Err(err).Msg("Failed to override from env vars")
 	}
-	s.host = s.setHost()
-	s.port = s.setPort()
+
+	// Initialize server
+	s := &Server{
+		ServerConfig: serverConfig,
+		logger:       logger,
+		server: http.Server{
+			ReadTimeout: serverConfig.ReadTimeout,
+		},
+	}
 
 	return s
 }
@@ -60,20 +76,20 @@ func (s *Server) WithReadTimeout(duration time.Duration) *Server {
 
 // WithHost sets the server host address using builder pattern
 func (s *Server) WithHost(host string) *Server {
-	s.host = host
+	s.Host = host
 	return s
 }
 
 // WithPort sets the server port using builder pattern
 func (s *Server) WithPort(port string) *Server {
-	s.port = port
+	s.Port = port
 	return s
 }
 
 // Serve servers requests on the mentioned host and port
 func (s *Server) Serve() {
 
-	s.server.Addr = s.host + ":" + s.port
+	s.server.Addr = s.Host + ":" + s.Port
 
 	s.logger.Info().Str("Addr", s.server.Addr).Msg("Listening")
 	if err := s.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -105,22 +121,4 @@ func (s *Server) Shutdown() {
 		s.logger.Fatal().Err(err).Msg("Server shutdown failed")
 	}
 	s.logger.Info().Msg("Server exited properly")
-}
-
-// setHost sets the default host to "0.0.0.0" if HOST env var is not set
-func (s *Server) setHost() string {
-	host := os.Getenv("HOST")
-	if host == "" {
-		host = DefaultHost
-	}
-	return host
-}
-
-// setPort sets the default port to "8080" is PORT env var is not set
-func (s *Server) setPort() string {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = DefaultPort
-	}
-	return port
 }
