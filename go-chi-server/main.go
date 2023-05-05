@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"time"
 
 	"github.com/go-chi/httplog"
 	"github.com/joho/godotenv"
@@ -63,7 +62,7 @@ func main() {
 	app := app.New().WithLogger(logger).CreateApp()
 
 	// Create server
-	server := server.New().WithLogger(logger).WithReadTimeout(5 * time.Second).WithHandlers(app)
+	server := server.New().WithLogger(logger).WithHandlers(app)
 
 	// The server is started on a separate goroutine as
 	// ListenAndServe is a blocking function,
