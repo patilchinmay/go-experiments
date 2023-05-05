@@ -36,10 +36,12 @@ Most likely each repository will build on top of the previous one, unless mentio
 
 - [ ] Config loading
 - [ ] Input parameter validation/sanitization
+- [ ] Parameter Object
 - [ ] Context parameter
 - [ ] Middleware
 - [ ] Passing request id end-to-end in the form of `X-Correlation-ID` header
 - [ ] Database/ORM/Repository Layer
+- [ ] Database disconnection/disruption
 - [ ] JSON handling
 - [ ] Implicit route registration
 - [ ] Route Versioning
