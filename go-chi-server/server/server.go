@@ -34,8 +34,8 @@ func New() *Server {
 	s := &Server{
 		server: http.Server{},
 	}
-	s.host = s.setDefaultHost()
-	s.port = s.setDefaultPort()
+	s.host = s.setHost()
+	s.port = s.setPort()
 
 	return s
 }
@@ -107,8 +107,8 @@ func (s *Server) Shutdown() {
 	s.logger.Info().Msg("Server exited properly")
 }
 
-// setDefaultHost sets the default host to "0.0.0.0" if HOST env var is not set
-func (s *Server) setDefaultHost() string {
+// setHost sets the default host to "0.0.0.0" if HOST env var is not set
+func (s *Server) setHost() string {
 	host := os.Getenv("HOST")
 	if host == "" {
 		host = DefaultHost
@@ -116,8 +116,8 @@ func (s *Server) setDefaultHost() string {
 	return host
 }
 
-// setDefaultPort sets the default port to "8080" is PORT env var is not set
-func (s *Server) setDefaultPort() string {
+// setPort sets the default port to "8080" is PORT env var is not set
+func (s *Server) setPort() string {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = DefaultPort
