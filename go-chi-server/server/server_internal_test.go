@@ -2,6 +2,7 @@ package server
 
 import (
 	"os"
+	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -15,28 +16,31 @@ var _ = Describe("Server Internal Tests", func() {
 
 	Context("Server Parameters", func() {
 		const (
-			NonDefaultHost = "192.168.10.10"
-			NonDefaultPort = "9000"
+			NonDefaultHost     = "192.168.10.10"
+			NonDefaultPort     = "9000"
+			DefaultHost        = "0.0.0.0"
+			DefaultPort        = "8080"
+			DefaultReadTimeout = 5 * time.Second
 		)
 
 		It("host non-default, port default", func() {
 			ts := New().WithLogger(zerolog.Nop()).WithHost(NonDefaultHost)
-			Expect(ts.host).To(Equal(NonDefaultHost))
-			Expect(ts.port).To(Equal(DefaultPort))
+			Expect(ts.Host).To(Equal(NonDefaultHost))
+			Expect(ts.Port).To(Equal(DefaultPort))
 			ts = nil
 		})
 
 		It("host default, port non-default", func() {
 			ts := New().WithLogger(zerolog.Nop()).WithPort(NonDefaultPort)
-			Expect(ts.port).To(Equal(NonDefaultPort))
-			Expect(ts.host).To(Equal(DefaultHost))
+			Expect(ts.Port).To(Equal(NonDefaultPort))
+			Expect(ts.Host).To(Equal(DefaultHost))
 			ts = nil
 		})
 
 		It("host non-default, port non-default", func() {
 			ts := New().WithLogger(zerolog.Nop()).WithHost(NonDefaultHost).WithPort(NonDefaultPort)
-			Expect(ts.port).To(Equal(NonDefaultPort))
-			Expect(ts.host).To(Equal(NonDefaultHost))
+			Expect(ts.Port).To(Equal(NonDefaultPort))
+			Expect(ts.Host).To(Equal(NonDefaultHost))
 			ts = nil
 		})
 
@@ -48,16 +52,38 @@ var _ = Describe("Server Internal Tests", func() {
 			defer os.Unsetenv("PORT")
 
 			ts := New().WithLogger(zerolog.Nop())
-			Expect(ts.port).To(Equal(NonDefaultPort))
-			Expect(ts.host).To(Equal(NonDefaultHost))
+			Expect(ts.Port).To(Equal(NonDefaultPort))
+			Expect(ts.Host).To(Equal(NonDefaultHost))
 			ts = nil
 		})
 
 		It("host default, port default", func() {
 			ts := New().WithLogger(zerolog.Nop())
-			Expect(ts.port).To(Equal(DefaultPort))
-			Expect(ts.host).To(Equal(DefaultHost))
+			Expect(ts.Port).To(Equal(DefaultPort))
+			Expect(ts.Host).To(Equal(DefaultHost))
 			ts = nil
 		})
+
+		It("Default ReadTimeout", func() {
+			ts := New().WithLogger(zerolog.Nop())
+			Expect(ts.server.ReadTimeout).To(Equal(DefaultReadTimeout))
+			ts = nil
+		})
+
+		It("Custom ReadTimeout", func() {
+			ts := New().WithLogger(zerolog.Nop()).WithReadTimeout(10 * time.Second)
+			Expect(ts.server.ReadTimeout).To(Equal(10 * time.Second))
+			ts = nil
+		})
+
+		It("Default ReadTimeout from env var", func() {
+			os.Setenv("READ_TIMEOUT", "15s")
+			defer os.Unsetenv("READ_TIMEOUT")
+
+			ts := New().WithLogger(zerolog.Nop())
+			Expect(ts.server.ReadTimeout).To(Equal(15 * time.Second))
+			ts = nil
+		})
+
 	})
 })
