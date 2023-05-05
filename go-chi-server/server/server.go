@@ -107,7 +107,7 @@ func (s *Server) Serve() {
 func (s *Server) Shutdown() {
 	// Timeout for graceful shutdown
 	// Why do we need a timeout context?
-	// server.Shutdown does not interrupt active coonections.
+	// server.Shutdown does not interrupt active connections.
 	// It works by first closing all open listeners, then closing all idle connections,
 	// and then **waiting indefinitely** for active connections to return to idle and then shut down.
 	// If the provided context expires before the shutdown is complete,
