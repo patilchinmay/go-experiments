@@ -53,6 +53,6 @@ go get github.com/onsi/gomega/...
 
 OR
 
-`godotenv -f ./.env ginkgo -v -r --cover`
+`ginkgo -v -r --cover`
 
 To check coverage via HTML: `go tool cover -html=coverprofile.out`
