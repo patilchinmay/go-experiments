@@ -85,5 +85,14 @@ var _ = Describe("Server Internal Tests", func() {
 			ts = nil
 		})
 
+		It("Custom ReadTimeout should be preferred in the presence of env var", func() {
+			os.Setenv("READ_TIMEOUT", "15s")
+			defer os.Unsetenv("READ_TIMEOUT")
+
+			ts := New().WithLogger(zerolog.Nop()).WithReadTimeout(10 * time.Second)
+			Expect(ts.server.ReadTimeout).To(Equal(10 * time.Second))
+			ts = nil
+		})
+
 	})
 })
