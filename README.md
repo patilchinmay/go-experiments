@@ -20,12 +20,13 @@ Most likely each repository will build on top of the previous one, unless mentio
    - [x] Separation of App and Server
    - [x] HTTP Request Logging (`httplog`)
    - [x] Configurable app logging (`zerolog`)
+   - [x] Injectable config from env vars for structured json logging and log level
    - [x] Loads environment variables from `.env` file (`godotenv`)
    - [x] Overrides the server config, sets defaults using env vars ([go-envconfig](https://github.com/sethvargo/go-envconfig))
    - [x] Graceful Shutdown / OS Interrupt signal handling in `main`
    - [x] Builder pattern for server creation with different methods such as `WithHost, WithPort etc.`
    - [x] Tests and how to run them (`ginkgo, gomega`)
-   - [x] Explanantory comments and godoc
+   - [x] Explanatory comments and `godoc`
 
 3. [https-serving](./https-serving)
    - [x]  Base [go-chi-server](./go-chi-server/)
@@ -36,9 +37,8 @@ Most likely each repository will build on top of the previous one, unless mentio
 - [ ] Config loading
 - [ ] Input parameter validation/sanitization
 - [ ] Context parameter
-- [ ] Middlewares
+- [ ] Middleware
 - [ ] Passing request id end-to-end in the form of `X-Correlation-ID` header
-- [ ] Injectable config for logging env
 - [ ] Database/ORM/Repository Layer
 - [ ] JSON handling
 - [ ] Implicit route registration
