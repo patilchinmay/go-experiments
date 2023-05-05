@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"log"
 	"os"
 	"os/signal"
+	"strconv"
 
 	"github.com/go-chi/httplog"
 	"github.com/joho/godotenv"
@@ -13,9 +13,6 @@ import (
 )
 
 func main() {
-	// If we crash the go code, we get the file name and line number
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 	// Create context that listens for the interrupt signal from the OS.
 	// We do this at the beginning of the program as
 	// We should be capable of catching signal as soon as the program starts
@@ -25,7 +22,9 @@ func main() {
 	defer stop()
 
 	// Create logger
-	logger := httplog.NewLogger("My App")
+	logger := httplog.NewLogger("Main", httplog.Options{
+		JSON: true, LogLevel: "debug",
+	})
 
 	// Load env variables.
 	err := godotenv.Load()
@@ -37,18 +36,30 @@ func main() {
 	env := os.Getenv("ENV")
 	logger.Info().Str("ENV", env).Msg("")
 
-	// Logger level setting
-	var jsonLogs bool
-	var logLevel string
-	if env == "local" {
-		jsonLogs = false
-		logLevel = "debug"
-	} else {
+	// json logging
+	jsonLogs, err := strconv.ParseBool(os.Getenv("JSONLOGS"))
+	if err != nil {
 		jsonLogs = true
-		logLevel = "info"
+		logger.Error().Msg("Failed to parse JSONLOGS, setting default jsonLogs to true")
 	}
 
-	// Redefine Logger with proper cconfig
+	// log level setting and validation
+	logLevel := os.Getenv("LOGLEVEL")
+	switch logLevel {
+	case
+		"trace",
+		"debug",
+		"info",
+		"warn",
+		"error",
+		"critical":
+		logger.Info().Str("logLevel", logLevel).Msg("Loaded logLevel from env var")
+	default:
+		logLevel = "info"
+		logger.Error().Msg("Invalid LOGLEVEL, setting default logLevel to info")
+	}
+
+	// Redefine Logger with proper config
 	logger = httplog.NewLogger("My App", httplog.Options{
 		JSON:     jsonLogs,
 		Concise:  true,
