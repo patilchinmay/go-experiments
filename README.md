@@ -49,4 +49,5 @@ Most likely each repository will build on top of the previous one, unless mentio
 - [ ] Load Testing
 - [ ] Code Quality / Static Analysis (e.g. Sonarqube, Codeclimate etc.)
 - [ ] Sentry
+- [ ] Feature Toggling
 - [ ] UML diagram
