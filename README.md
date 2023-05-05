@@ -47,4 +47,5 @@ Most likely each repository will build on top of the previous one, unless mentio
 - [ ] Route Versioning
 - [ ] Tests
 - [ ] Load Testing
+- [ ] Code Quality / Static Analysis (e.g. Sonarqube, Codeclimate etc.)
 - [ ] UML diagram
