@@ -45,7 +45,7 @@ Most likely each repository will build on top of the previous one, unless mentio
 - [ ] JSON handling
 - [ ] Implicit route registration
 - [ ] Route Versioning
-- [ ] Tests
+- [ ] Cloud Native Golang Constructs e.g. retry, switch-breaker etc.
 - [ ] Load Testing
 - [ ] Code Quality / Static Analysis (e.g. Sonarqube, Codeclimate etc.)
 - [ ] Sentry
