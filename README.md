@@ -31,6 +31,7 @@ Most likely each repository will build on top of the previous one, unless mentio
 3. [https-serving](./https-serving)
    - [x]  Base [go-chi-server](./go-chi-server/)
    - [x]  HTTPS serving
+   - [ ]  Automatic certificate [reloading](https://opensource.com/article/22/9/dynamically-update-tls-certificates-golang-server-no-downtime) on certificate changes (e.g. renewal)
 
 # Possible Improvements
 
