@@ -25,6 +25,7 @@ Most likely each repository will build on top of the previous one, unless mentio
    - [x] Overrides the server config, sets defaults using env vars ([go-envconfig](https://github.com/sethvargo/go-envconfig))
    - [x] Graceful Shutdown / OS Interrupt signal handling in `main`
    - [x] Builder pattern for server creation with different methods such as `WithHost, WithPort etc.`
+   - [x] Implicit route registration using `Subrouter` interface
    - [x] Tests and how to run them (`ginkgo, gomega`)
    - [x] Explanatory comments and `godoc`
 
@@ -44,7 +45,6 @@ Most likely each repository will build on top of the previous one, unless mentio
 - [ ] Database/ORM/Repository Layer
 - [ ] Database disconnection/disruption
 - [ ] JSON handling
-- [ ] Implicit route registration
 - [ ] Route Versioning
 - [ ] Cloud Native Golang Constructs e.g. retry, switch-breaker etc.
 - [ ] Load Testing
