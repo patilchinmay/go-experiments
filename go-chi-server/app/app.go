@@ -1,8 +1,6 @@
 package app
 
 import (
-	"net/http"
-
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -11,11 +9,21 @@ import (
 )
 
 type App struct {
-	logger zerolog.Logger
+	logger     zerolog.Logger
+	Router     *chi.Mux
+	Subrouters []Subrouter
 }
 
+var app *App
+
+// New returns a pointer to App using singleton pattern
 func New() *App {
-	return &App{}
+	if app == nil {
+		return &App{
+			Router: chi.NewRouter(),
+		}
+	}
+	return app
 }
 
 func (a *App) WithLogger(logger zerolog.Logger) *App {
@@ -23,24 +31,14 @@ func (a *App) WithLogger(logger zerolog.Logger) *App {
 	return a
 }
 
-func (a *App) Ping(w http.ResponseWriter, r *http.Request) {
-	oplog := httplog.LogEntry(r.Context())
-	oplog.Info().Msg("Pong")
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/text")
-	w.Write([]byte("Pong"))
-}
-
-func (a *App) CreateApp() *chi.Mux {
-	router := chi.NewRouter()
-
-	router.Use(httplog.RequestLogger(a.logger))
-	router.Use(middleware.Recoverer)
-	router.Use(middleware.Heartbeat("/health"))
+func (a *App) CreateAndGetApp() *App {
+	a.Router.Use(httplog.RequestLogger(a.logger))
+	a.Router.Use(middleware.Recoverer)
+	a.Router.Use(middleware.Heartbeat("/health"))
 
 	// Basic CORS
 	// for more ideas, see: https://developer.github.com/v3/#cross-origin-resource-sharing
-	router.Use(cors.Handler(cors.Options{
+	a.Router.Use(cors.Handler(cors.Options{
 		// AllowedOrigins:   []string{"https://foo.com"}
 		// Use this to allow specific origin hosts
 		AllowedOrigins: []string{"*"},
@@ -51,7 +49,8 @@ func (a *App) CreateApp() *chi.Mux {
 		// MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
-	router.Get("/ping", a.Ping)
+	// https://github.com/go-chi/chi/issues/780
+	a.Router.HandleFunc("/", a.Router.NotFoundHandler())
 
-	return router
+	return a
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/httplog"
 	"github.com/joho/godotenv"
 	"github.com/patilchinmay/go-experiments/go-chi-server/app"
+	"github.com/patilchinmay/go-experiments/go-chi-server/app/routes/ping"
 	"github.com/patilchinmay/go-experiments/go-chi-server/server"
 )
 
@@ -70,10 +71,18 @@ func main() {
 	})
 
 	// Create app with routes handlers
-	app := app.New().WithLogger(logger).CreateApp()
+	app := app.New().WithLogger(logger).CreateAndGetApp()
+
+	// Create ping subrouter
+	// Register path and handler
+	// Add the subrouter to app.Subrouters
+	ping.New().InitializeRoutes().AddToAppSubrouters(app)
+
+	// Register subrouters on main router
+	app.RegisterSubrouters()
 
 	// Create server
-	server := server.New().WithLogger(logger).WithHandlers(app)
+	server := server.New().WithLogger(logger).WithHandlers(app.Router)
 
 	// The server is started on a separate goroutine as
 	// ListenAndServe is a blocking function,
