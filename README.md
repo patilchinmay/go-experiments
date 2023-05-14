@@ -6,9 +6,7 @@ This repository is a [go workspace](https://go.dev/doc/tutorial/workspaces) for 
 
 Basic familiarity of golang and backend development is assumed.
 
-The repositories are numbered. Each one has a README.md with description, relevant details to setup and run.
-
-Most likely each repository will build on top of the previous one, unless mentioned otherwise.
+Each repository has a README.md with description, relevant details to setup and run.
 
 # Table of Contents
 
@@ -17,7 +15,7 @@ Most likely each repository will build on top of the previous one, unless mentio
 
 2. [go-chi-server](./go-chi-server/)
    - [x] Basic Go-chi Server (`BCS`)
-   - [x] Separation of App and Server
+   - [x] Separation of App and Server as well as creation using `Singleton` pattern
    - [x] HTTP Request Logging (`httplog`)
    - [x] Configurable app logging (`zerolog`)
    - [x] Injectable config from env vars for structured json logging and log level
@@ -52,3 +50,14 @@ Most likely each repository will build on top of the previous one, unless mentio
 - [ ] Sentry
 - [ ] Feature Toggling
 - [ ] UML diagram
+- [ ] DB Connection with Connection pool
+- [ ] Exposing metrics to Prometheus using go's runtime/metrics package.
+- [ ] Timing out HTTP connections
+- [ ] Handle DB disconnections
+- [ ] Forcing HTTP 2.0 / 1.2
+- [ ] Idle, Read and write timeout in http.Server
+- [ ] Verify that http.ListenAndServe fields each new request on a separate goroutine by sending multiple requests and collecting runtime/metrics.
+- [ ] Is it possible to print the goroutine ID? For simplifying above.
+- [ ] Websocket server and client. Gorilla websocket library.
+- [ ] DDoS and how to avoid it.
+- [ ] Caching (local, redis etc)
