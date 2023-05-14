@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
-	"flag"
 	"log"
 	"os"
 	"os/signal"
@@ -61,24 +59,11 @@ func main() {
 		},
 	})
 
-	// key and certificate for tls
-	var (
-		tlscert, tlskey string
-	)
-	flag.StringVar(&tlscert, "tlscert", "./certs/server.crt", "File containing the x509 Certificate for HTTPS. This is a public key.")
-	flag.StringVar(&tlskey, "tlskey", "./certs/server.key", "File containing the x509 private key to --tlscert. This is a private key.")
-
-	flag.Parse()
-
-	certs, err := tls.LoadX509KeyPair(tlscert, tlskey)
-	if err != nil {
-		logger.Fatal().Err(err).Msg("Failed to load key pair")
-	}
 	// Create app with routes handlers
 	app := app.New().WithLogger(logger).CreateApp()
 
 	// Create server
-	server := server.New().WithLogger(logger).WithReadTimeout(5 * time.Second).WithHandlers(app).WithTLS(certs)
+	server := server.New().WithLogger(logger).WithReadTimeout(5 * time.Second).WithHandlers(app).WithTLS()
 
 	// The server is started on a separate goroutine as
 	// ListenAndServe is a blocking function,

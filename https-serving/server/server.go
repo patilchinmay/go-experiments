@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"crypto/tls"
+	"flag"
 	"net/http"
 	"os"
 	"time"
@@ -42,8 +43,30 @@ func New() *Server {
 }
 
 // WithTLS sets the TLS config with provided x509 certificate
-func (s *Server) WithTLS(certs tls.Certificate) *Server {
-	s.server.TLSConfig = &tls.Config{Certificates: []tls.Certificate{certs}}
+func (s *Server) WithTLS() *Server {
+	// certificate and key for tls
+	var (
+		tlscert, tlskey string
+	)
+
+	flag.StringVar(&tlscert, "tlscert", "./certs/server.crt", "File containing the x509 Certificate for HTTPS. This is a public key.")
+	flag.StringVar(&tlskey, "tlskey", "./certs/server.key", "File containing the x509 private key to --tlscert. This is a private key.")
+
+	flag.Parse()
+
+	s.server.TLSConfig = &tls.Config{
+		GetCertificate: func(*tls.ClientHelloInfo) (*tls.Certificate, error) {
+			// Always get latest tlscert and tlskey
+			// ex: keeping certificates file somewhere in global location where created certificates updated and this closure function can refer that
+			// Ref: https://opensource.com/article/22/9/dynamically-update-tls-certificates-golang-server-no-downtime
+			cert, err := tls.LoadX509KeyPair(tlscert, tlskey)
+			if err != nil {
+				s.logger.Error().Err(err).Msg("Failed to load key pair")
+				return nil, err
+			}
+			return &cert, nil
+		},
+	}
 	return s
 }
 
