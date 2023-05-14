@@ -22,17 +22,17 @@ Most likely each repository will build on top of the previous one, unless mentio
    - [x] Configurable app logging (`zerolog`)
    - [x] Injectable config from env vars for structured json logging and log level
    - [x] Loads environment variables from `.env` file (`godotenv`)
-   - [x] Overrides the server config, sets defaults using env vars ([go-envconfig](https://github.com/sethvargo/go-envconfig))
+   - [x] Overrides the server (`/go-chi-server/server/server.go`) config, sets defaults using env vars ([go-envconfig](https://github.com/sethvargo/go-envconfig))
    - [x] Graceful Shutdown / OS Interrupt signal handling in `main`
    - [x] Builder pattern for server creation with different methods such as `WithHost, WithPort etc.`
-   - [x] Implicit route registration using `Subrouter` interface
-   - [x] Tests and how to run them (`ginkgo, gomega`)
+   - [x] Implicit route registration using `Subrouter (./go-chi-server/app/subrouters.go)` interface in `./go-chi-server/app/routes/*`
+   - [x] Tests, coverage and how to run them (`ginkgo, gomega`)
    - [x] Explanatory comments and `godoc`
 
 3. [https-serving](./https-serving)
    - [x]  Base [go-chi-server](./go-chi-server/)
    - [x]  HTTPS serving
-   - [ ]  Automatic certificate [reloading](https://opensource.com/article/22/9/dynamically-update-tls-certificates-golang-server-no-downtime) on certificate changes (e.g. renewal)
+   - [x]  Automatic certificate [reloading](https://opensource.com/article/22/9/dynamically-update-tls-certificates-golang-server-no-downtime) on certificate changes (e.g. renewal)
 
 # Possible Improvements
 
