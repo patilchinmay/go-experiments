@@ -11,7 +11,6 @@ import (
 	"github.com/rs/zerolog"
 
 	"github.com/patilchinmay/go-experiments/go-chi-server/app"
-	"github.com/patilchinmay/go-experiments/go-chi-server/app/routes/ping"
 	"github.com/patilchinmay/go-experiments/go-chi-server/utils/testhelpers"
 )
 
@@ -22,9 +21,8 @@ var _ = Describe("Ping", func() {
 		// Create app
 		app := app.New().WithLogger(zerolog.Nop()).CreateAndGetApp()
 
-		// Initialize and register "/ping" subrouter
-		ping.New().InitializeRoutes().AddToAppSubrouters(app)
-		app.RegisterSubrouters()
+		// Initialize and register subrouters
+		app.CreateSubrouters().MountSubrouters()
 
 		// Create server to test the app
 		ts = httptest.NewServer(app.Router)

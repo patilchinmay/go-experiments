@@ -5,7 +5,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog"
-	"github.com/patilchinmay/go-experiments/go-chi-server/app"
 )
 
 // Ping implements app.Subrouter interface
@@ -27,28 +26,25 @@ func New() *Ping {
 	return ping
 }
 
-// InitializeRoutes adds the routes
-// from current files in local subrouter
+// InitializeRoutes associates the http.HandlerFuncs
+// from Ping package and http.Method with Ping.Subrouter
 func (p *Ping) InitializeRoutes() *Ping {
 	p.Subrouter.Get(p.Path, p.Ping) // GET /ping
 
 	return p
 }
 
-// MountSubrouter mounts the subrouter onto the main router
-func (p *Ping) MountSubrouterOn(r chi.Router) {
+// MountOn mounts the Ping.Subrouter onto r (the main router)
+func (p *Ping) MountOn(r chi.Router) {
 	r.Mount("/", p.Subrouter) // r is the main router
 }
 
-// AddToAppSubrouters appends this Subrouter to app.Subrouters
-func (p *Ping) AddToAppSubrouters(a *app.App) {
-	a.Subrouters = append(a.Subrouters, p)
-}
-
+// Getpath returns the Ping.Path
 func (p *Ping) Getpath() string {
 	return p.Path
 }
 
+// Ping is the handler for GET /ping
 func (p *Ping) Ping(w http.ResponseWriter, r *http.Request) {
 	oplog := httplog.LogEntry(r.Context())
 	oplog.Debug().Msg("Pong")
