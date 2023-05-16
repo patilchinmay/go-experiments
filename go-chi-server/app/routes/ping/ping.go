@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog"
+	"github.com/patilchinmay/go-experiments/go-chi-server/app"
 )
 
 // Ping implements app.Subrouter interface
@@ -15,10 +16,10 @@ type Ping struct {
 
 var ping *Ping
 
-// New returns a singleton instance of Ping
-func New() *Ping {
+// GetOrCreate returns a singleton instance of Ping
+func GetOrCreate() *Ping {
 	if ping == nil {
-		return &Ping{
+		ping = &Ping{
 			Path:      "/ping",
 			Subrouter: chi.NewRouter(),
 		}
@@ -48,7 +49,21 @@ func (p *Ping) Getpath() string {
 func (p *Ping) Ping(w http.ResponseWriter, r *http.Request) {
 	oplog := httplog.LogEntry(r.Context())
 	oplog.Debug().Msg("Pong")
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Key", "Value")
 	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/text")
-	w.Write([]byte("Pong"))
+
+	w.Write([]byte(`{"Ping":"Pong"}`))
+}
+
+// init initializes the ping subrouter and
+// appends it to the []app.Subrouters as side-effects.
+// This function will be executed automatically
+// when this package is imported (as a dash import/blank identifier).
+func init() {
+	// Create ping subrouter with routes
+	ping := GetOrCreate().InitializeRoutes()
+	// Append the ping subrouter to []app.Subrouters
+	app.GetOrCreate().AppendSubrouter(ping)
 }

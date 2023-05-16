@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/httplog"
 	"github.com/joho/godotenv"
 	"github.com/patilchinmay/go-experiments/go-chi-server/app"
+	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/routes/ping"
 	"github.com/patilchinmay/go-experiments/go-chi-server/server"
 )
 
@@ -70,10 +71,7 @@ func main() {
 	})
 
 	// Create app with routes handlers (uses builder pattern)
-	app := app.New().WithLogger(logger).CreateAndGetApp()
-
-	// Create instances of all subrouters (can also use builder pattern)
-	app.CreateSubrouters()
+	app := app.GetOrCreate().WithLogger(logger).SetupMiddlewares().SetupCORS().SetupNotFoundHandler()
 
 	// Mounts subrouters on main app/router (can also use builder pattern)
 	app.MountSubrouters()

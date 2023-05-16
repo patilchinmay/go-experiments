@@ -16,10 +16,11 @@ type App struct {
 
 var app *App
 
-// New returns a pointer to App using singleton pattern
-func New() *App {
+// GetOrCreate returns a pointer to App using singleton pattern.
+// If app exists, it returns it. If not, it creates it and returns it
+func GetOrCreate() *App {
 	if app == nil {
-		return &App{
+		app = &App{
 			Router: chi.NewRouter(),
 		}
 	}
@@ -31,11 +32,15 @@ func (a *App) WithLogger(logger zerolog.Logger) *App {
 	return a
 }
 
-func (a *App) CreateAndGetApp() *App {
+func (a *App) SetupMiddlewares() *App {
+	// httplog.RequestLogger sets up RequestId and Recoverer as well
 	a.Router.Use(httplog.RequestLogger(a.logger))
-	a.Router.Use(middleware.Recoverer)
 	a.Router.Use(middleware.Heartbeat("/health"))
 
+	return a
+}
+
+func (a *App) SetupCORS() *App {
 	// Basic CORS
 	// for more ideas, see: https://developer.github.com/v3/#cross-origin-resource-sharing
 	a.Router.Use(cors.Handler(cors.Options{
@@ -49,6 +54,10 @@ func (a *App) CreateAndGetApp() *App {
 		// MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
+	return a
+}
+
+func (a *App) SetupNotFoundHandler() *App {
 	// https://github.com/go-chi/chi/issues/780
 	a.Router.HandleFunc("/", a.Router.NotFoundHandler())
 

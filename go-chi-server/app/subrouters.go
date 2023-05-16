@@ -2,7 +2,6 @@ package app
 
 import (
 	"github.com/go-chi/chi/v5"
-	"github.com/patilchinmay/go-experiments/go-chi-server/app/routes/ping"
 )
 
 // Subrouter is implemented by all subrouters
@@ -11,18 +10,6 @@ import (
 type Subrouter interface {
 	MountOn(chi.Router)
 	Getpath() string
-}
-
-// CreateSubrouters creates an instance of the subrouters
-func (a *App) CreateSubrouters() *App {
-	// Create ping subrouter
-	// Register path and handler
-	// Add the subrouter to app.Subrouters
-	ping := ping.New().InitializeRoutes()
-	a.AppendSubrouter(ping)
-
-	// Any additional subrouter should be initialized here
-	return a
 }
 
 // AppendSubrouter appends the subrouter to app.Subrouters

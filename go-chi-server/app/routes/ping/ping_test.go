@@ -19,10 +19,12 @@ var _ = Describe("Ping", func() {
 
 	BeforeEach(func() {
 		// Create app
-		app := app.New().WithLogger(zerolog.Nop()).CreateAndGetApp()
+		app := app.GetOrCreate().WithLogger(zerolog.Nop()).SetupMiddlewares().SetupCORS().SetupNotFoundHandler()
+
+		// We do not need to instantiate ping as tests will implicitly run the init function of ping package which will instantiate itself
 
 		// Initialize and register subrouters
-		app.CreateSubrouters().MountSubrouters()
+		app.MountSubrouters()
 
 		// Create server to test the app
 		ts = httptest.NewServer(app.Router)
@@ -47,7 +49,7 @@ var _ = Describe("Ping", func() {
 
 			res, bodystring := testhelpers.DoRequest(opt)
 			Expect(res.StatusCode).To(Equal(http.StatusOK))
-			Expect(bodystring).To(Equal("Pong"))
+			Expect(bodystring).To(Equal(`{"Ping":"Pong"}`))
 		})
 	})
 })
