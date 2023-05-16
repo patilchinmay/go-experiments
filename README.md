@@ -15,7 +15,7 @@ Each repository has a README.md with description, relevant details to setup and 
 
 2. [go-chi-server](./go-chi-server/)
 
-   **Basics:**
+  **Basics:**
 
    - [x] Basic Go-chi Server (`BCS`)
    - [x] Separation of App and Server. This is a good practice and makes testing easier.
@@ -28,7 +28,7 @@ Each repository has a README.md with description, relevant details to setup and 
      - E.g. `go-chi-server/app/ping` package implements the `Subrouter` interface.
      - It has an `init()` for side-effect driven registration.
 
-   **Traceability:**
+  **Traceability:**
 
    - [x] HTTP Request Logging (`httplog`).
    - [x] Configurable app logging (`zerolog`).
@@ -38,7 +38,7 @@ Each repository has a README.md with description, relevant details to setup and 
      - [RequestID](https://github.com/go-chi/chi/blob/master/middleware/request_id.go) is automatically set by `httplog.RequestLogger` in `go-chi-server/app/app.go:SetupMiddlewares()`.
      - Example in `GET /ping`.
 
-   **Configuration:**
+  **Configuration:**
 
    - [x] Loads environment variables from `.env` file (`godotenv`).
    - [x] Injectable config from env vars for for `httplog`.
@@ -46,11 +46,11 @@ Each repository has a README.md with description, relevant details to setup and 
      - Log level setting using `LOGLEVEL` env var.
    - [x] Overrides the server (`/go-chi-server/server/server.go:Server`) config, sets defaults using env vars ([go-envconfig](https://github.com/sethvargo/go-envconfig)).
 
-   **Docker:**
+  **Docker:**
 
    - [x] Includes `Dockerfile`, `docker-compose.yaml` and `.dockerignore`.
-   - [x] Uses `multi-stage` builds.
-   - [x] Leverages docker caching
+   - [x] Uses `multi-stage` builds to reduce the size of resulting image.
+   - [x] Leverages docker caching.
      - Copies `go.*` files first (e.g. `go.mod`, `go.sum`).
      - Then downloads the dependencies and caches them with `go mod download`.
      - Then copies the rest of the application files.
@@ -58,14 +58,14 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] Uses `nonroot` user for running application.
    - [x] Uses `distroless` image for running application.
 
-   **Tests and Docs:**
+  **Tests and Docs:**
 
    - [x] Tests, coverage and how to run them (`ginkgo, gomega`).
    - [x] Explanatory comments and `godoc`.
    - [x] Code coverage.
      - To check code coverage, run `go tool cover -html=coverprofile.out`
 
-   **Miscellaneous**:
+  **Miscellaneous**:
 
    - [x] Graceful Shutdown / OS Interrupt signal handling in `main.go`.
 
