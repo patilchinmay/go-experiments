@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/httplog"
 	"github.com/joho/godotenv"
 	"github.com/patilchinmay/go-experiments/go-chi-server/app"
-	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/routes/ping"
+	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/ping"
 	"github.com/patilchinmay/go-experiments/go-chi-server/server"
 )
 
