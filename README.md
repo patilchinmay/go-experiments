@@ -19,7 +19,7 @@ Each repository has a README.md with description, relevant details to setup and 
 
    - [x] Basic Go-chi Server (`BCS`)
    - [x] Separation of App and Server. This is a good practice and makes testing easier.
-   - [ ] Creation of App and Server using `Singleton` pattern.
+   - [x] Creation of App and Server using `Singleton` pattern.
    - [x] Builder pattern for App and Server creation with different methods such as `WithLogger, WithHost, WithPort etc.`.
    - [x] Implicit route registration.
      - Uses `Subrouter (go-chi-server/app/subrouters.go)` interface.
@@ -35,7 +35,7 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] End-to-end unique request id.
      - If the incoming request contains non-empty `X-Request-Id` header with value, it will be used.
      - Otherwise a unique id will be created using go-chi [RequestID](https://github.com/go-chi/chi/blob/master/middleware/request_id.go) middleware.
-     - [RequestID](https://github.com/go-chi/chi/blob/master/middleware/request_id.go) is automatically set by httplog.RequestLogger.
+     - [RequestID](https://github.com/go-chi/chi/blob/master/middleware/request_id.go) is automatically set by `httplog.RequestLogger` in `go-chi-server/app/app.go:SetupMiddlewares()`.
      - Example in `GET /ping`.
 
    **Configuration:**
