@@ -4,4 +4,4 @@ test:
 	ginkgo -v -r --cover
 
 run:
-	go run main.go
+	go run .
