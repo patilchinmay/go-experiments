@@ -27,6 +27,13 @@ func GetOrCreate() *App {
 	return app
 }
 
+// Discard will remove the reference to app so that it can be garbage collected. In other words, it deletes the singleton instance of *App.
+func Discard() {
+	if app != nil {
+		app = nil
+	}
+}
+
 func (a *App) WithLogger(logger zerolog.Logger) *App {
 	a.logger = logger
 	return a

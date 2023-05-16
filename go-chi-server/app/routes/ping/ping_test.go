@@ -16,21 +16,23 @@ import (
 
 var _ = Describe("Ping", func() {
 	var ts = &httptest.Server{}
+	var App *app.App
 
 	BeforeEach(func() {
-		// Create app
-		app := app.GetOrCreate().WithLogger(zerolog.Nop()).SetupMiddlewares().SetupCORS().SetupNotFoundHandler()
+		// Create app with routes handlers (uses builder pattern)
+		App = app.GetOrCreate().WithLogger(zerolog.Nop()).SetupCORS().SetupMiddlewares().SetupNotFoundHandler()
 
 		// We do not need to instantiate ping as tests will implicitly run the init function of ping package which will instantiate itself
 
 		// Initialize and register subrouters
-		app.MountSubrouters()
+		App.MountSubrouters()
 
 		// Create server to test the app
-		ts = httptest.NewServer(app.Router)
+		ts = httptest.NewServer(App.Router)
 	})
 
 	AfterEach(func() {
+		defer app.Discard()
 		defer ts.Close()
 	})
 

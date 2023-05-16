@@ -71,7 +71,7 @@ func main() {
 	})
 
 	// Create app with routes handlers (uses builder pattern)
-	app := app.GetOrCreate().WithLogger(logger).SetupMiddlewares().SetupCORS().SetupNotFoundHandler()
+	app := app.GetOrCreate().WithLogger(logger).SetupCORS().SetupMiddlewares().SetupNotFoundHandler()
 
 	// Mounts subrouters on main app/router (can also use builder pattern)
 	app.MountSubrouters()
