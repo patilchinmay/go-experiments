@@ -14,20 +14,39 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] Verify that setup works with a hello world application.
 
 2. [go-chi-server](./go-chi-server/)
+
+   **Basics:**
+
    - [x] Basic Go-chi Server (`BCS`)
    - [x] Separation of App and Server as well as creation using `Singleton` pattern
+   - [x] Builder pattern for App and Server creation with different methods such as `WithLogger, WithHost, WithPort etc.`
+
+  **Traceability:**
+
    - [x] HTTP Request Logging (`httplog`)
    - [x] Configurable app logging (`zerolog`)
+   - [x] End-to-end unique request id
+     - If the incoming request contains `X-Request-Id` header with value, it will be used.
+     - Otherwise a unique id will be created using go-chi [RequestID](https://github.com/go-chi/chi/blob/master/middleware/request_id.go) middleware.
+     - [RequestID](https://github.com/go-chi/chi/blob/master/middleware/request_id.go) is automatically set by httplog.RequestLogger
+     - Example in `GET /ping`
+
+  **Configuration:**
+
    - [x] Injectable config from env vars for structured json logging and log level
    - [x] Loads environment variables from `.env` file (`godotenv`)
    - [x] Overrides the server (`/go-chi-server/server/server.go`) config, sets defaults using env vars ([go-envconfig](https://github.com/sethvargo/go-envconfig))
+
+
    - [x] Graceful Shutdown / OS Interrupt signal handling in `main`
-   - [x] Builder pattern for server creation with different methods such as `WithHost, WithPort etc.`
    - [x] Implicit route registration using `Subrouter (./go-chi-server/app/subrouters.go)` interface in `./go-chi-server/app/routes/*`
+
+   **Tests and Docs:**
+
    - [x] Tests, coverage and how to run them (`ginkgo, gomega`)
    - [x] Explanatory comments and `godoc`
 
-3. [https-serving](./https-serving)
+1. [https-serving](./https-serving)
    - [x]  Base [go-chi-server](./go-chi-server/)
    - [x]  HTTPS serving
    - [x]  Automatic certificate [reloading](https://opensource.com/article/22/9/dynamically-update-tls-certificates-golang-server-no-downtime) on certificate changes (e.g. renewal)
@@ -39,7 +58,6 @@ Each repository has a README.md with description, relevant details to setup and 
 - [ ] Parameter Object
 - [ ] Context parameter
 - [ ] Middleware
-- [ ] Passing request id end-to-end in the form of `X-Correlation-ID` header
 - [ ] Database/ORM/Repository Layer
 - [ ] Database disconnection/disruption
 - [ ] JSON handling
