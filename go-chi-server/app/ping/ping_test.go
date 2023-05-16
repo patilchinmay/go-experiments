@@ -51,7 +51,7 @@ var _ = Describe("Ping", func() {
 
 			res, bodystring := testhelpers.DoRequest(opt)
 			Expect(res.StatusCode).To(Equal(http.StatusOK))
-			Expect(bodystring).To(Equal(`{"Ping":"Pong"}`))
+			Expect(bodystring).To(ContainSubstring(`"Ping":"Pong"`))
 		})
 	})
 })

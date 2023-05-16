@@ -51,30 +51,35 @@ var _ = Describe("App", func() {
 
 	// GET /404
 	Context("NotFoundHandler ", func() {
-		It("should return http 404", func() {
-			to := time.Duration(10)
-			opt := &testhelpers.HttpOptions{
-				Ctx:    context.Background(),
-				Url:    ts.URL + "/404",
-				TO:     &to,
-				Method: http.MethodGet,
-			}
 
-			res, _ := testhelpers.DoRequest(opt)
-			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
+		When("GET /404", func() {
+			It("should return http 404", func() {
+				to := time.Duration(10)
+				opt := &testhelpers.HttpOptions{
+					Ctx:    context.Background(),
+					Url:    ts.URL + "/404",
+					TO:     &to,
+					Method: http.MethodGet,
+				}
+
+				res, _ := testhelpers.DoRequest(opt)
+				Expect(res.StatusCode).To(Equal(http.StatusNotFound))
+			})
 		})
 
-		It("should return http 404", func() {
-			to := time.Duration(10)
-			opt := &testhelpers.HttpOptions{
-				Ctx:    context.Background(),
-				Url:    ts.URL + "/abcd",
-				TO:     &to,
-				Method: http.MethodGet,
-			}
+		When("GET /abcd", func() {
+			It("should return http 404", func() {
+				to := time.Duration(10)
+				opt := &testhelpers.HttpOptions{
+					Ctx:    context.Background(),
+					Url:    ts.URL + "/abcd",
+					TO:     &to,
+					Method: http.MethodGet,
+				}
 
-			res, _ := testhelpers.DoRequest(opt)
-			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
+				res, _ := testhelpers.DoRequest(opt)
+				Expect(res.StatusCode).To(Equal(http.StatusNotFound))
+			})
 		})
 
 	})
