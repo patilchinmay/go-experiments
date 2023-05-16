@@ -39,7 +39,9 @@ Each repository has a README.md with description, relevant details to setup and 
 
    **Configuration:**
 
-   - [x] Injectable config from env vars for structured json logging and log level
+   - [x] Injectable config from environment vars for for `httplog`
+     - Structured json logging using `JSONLOGS` env var.
+     - Log level setting using `LOGLEVEL` env var.
    - [x] Loads environment variables from `.env` file (`godotenv`)
    - [x] Overrides the server (`/go-chi-server/server/server.go:Server`) config, sets defaults using env vars ([go-envconfig](https://github.com/sethvargo/go-envconfig))
 
