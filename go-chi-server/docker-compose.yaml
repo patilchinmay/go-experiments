@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  go-chi-server:
+    container_name: go-chi-server
+    image: patilchinmay/go-chi-server:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: run
+    ports:
+      - "8080:8080"
+    environment:
+      HOST: 0.0.0.0
+      # docker compose automatically loads env vars from .env file

@@ -20,7 +20,7 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] Basic Go-chi Server (`BCS`)
    - [x] Separation of App and Server. This is a good practice and makes testing easier.
    - [x] Creation of App and Server using `Singleton` pattern.
-   - [x] Builder pattern for App and Server creation with different methods such as `WithLogger, WithHost, WithPort etc.`.
+   - [x] `Builder` pattern for App and Server setup with different methods such as `WithLogger, WithHost, WithPort etc.`.
    - [x] Implicit route registration.
      - Uses `Subrouter (go-chi-server/app/subrouters.go)` interface.
      - Registers the subrouter using side-effects (blank identifier import) in `main.go`.
@@ -45,6 +45,18 @@ Each repository has a README.md with description, relevant details to setup and 
      - Structured json logging using `JSONLOGS` env var.
      - Log level setting using `LOGLEVEL` env var.
    - [x] Overrides the server (`/go-chi-server/server/server.go:Server`) config, sets defaults using env vars ([go-envconfig](https://github.com/sethvargo/go-envconfig)).
+
+   **Docker:**
+
+   - [x] Includes `Dockerfile`, `docker-compose.yaml` and `.dockerignore`.
+   - [x] Uses `multi-stage` builds.
+   - [x] Leverages docker caching
+     - Copies `go.*` files first (e.g. `go.mod`, `go.sum`).
+     - Then downloads the dependencies and caches them with `go mod download`.
+     - Then copies the rest of the application files.
+     - This makes sure that we reuse the cache for dependencies layer (even if there is a change in the application code).
+   - [x] Uses `nonroot` user for running application.
+   - [x] Uses `distroless` image for running application.
 
    **Tests and Docs:**
 
