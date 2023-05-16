@@ -21,7 +21,7 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] Separation of App and Server as well as creation using `Singleton` pattern
    - [x] Builder pattern for App and Server creation with different methods such as `WithLogger, WithHost, WithPort etc.`
 
-  **Traceability:**
+   **Traceability:**
 
    - [x] HTTP Request Logging (`httplog`)
    - [x] Configurable app logging (`zerolog`)
@@ -31,7 +31,7 @@ Each repository has a README.md with description, relevant details to setup and 
      - [RequestID](https://github.com/go-chi/chi/blob/master/middleware/request_id.go) is automatically set by httplog.RequestLogger
      - Example in `GET /ping`
 
-  **Configuration:**
+   **Configuration:**
 
    - [x] Injectable config from env vars for structured json logging and log level
    - [x] Loads environment variables from `.env` file (`godotenv`)
@@ -46,7 +46,7 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] Tests, coverage and how to run them (`ginkgo, gomega`)
    - [x] Explanatory comments and `godoc`
 
-1. [https-serving](./https-serving)
+3. [https-serving](./https-serving)
    - [x]  Base [go-chi-server](./go-chi-server/)
    - [x]  HTTPS serving
    - [x]  Automatic certificate [reloading](https://opensource.com/article/22/9/dynamically-update-tls-certificates-golang-server-no-downtime) on certificate changes (e.g. renewal)
