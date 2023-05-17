@@ -58,12 +58,17 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] Uses `nonroot` user for running application.
    - [x] Uses `distroless` image for running application.
 
-   **Tests and Docs:**
+   **Tests, Benchmark and Docs:**
 
    - [x] Tests, coverage and how to run them (`ginkgo, gomega`).
    - [x] Explanatory comments and `godoc`.
-   - [x] Code coverage.
-     - To check code coverage, run `go tool cover -html=coverprofile.out`
+   - [x] **Code Coverage**
+     - Run tests: `make test`
+     - To check code coverage: `go tool cover -html=coverprofile.out`
+   - [x] **Load Testing** (`apache benchmark`)
+     - Start app: `make run`
+     - Run `ab`: `docker run --rm jordi/ab -s 5 -k -c 500 -n 10000 http://host.docker.internal:8080/ping`
+     - Why `ab` in docker? Because of [issues](https://serverfault.com/questions/806585/why-is-ab-erroring-with-apr-socket-recv-connection-reset-by-peer-54-on-osx) with ab in macos.
 
    **Miscellaneous**:
 
@@ -86,7 +91,6 @@ Each repository has a README.md with description, relevant details to setup and 
 - [ ] JSON handling
 - [ ] Route Versioning
 - [ ] Cloud Native Golang Constructs e.g. retry, switch-breaker etc.
-- [ ] Load Testing
 - [ ] Code Quality / Static Analysis (e.g. Sonarqube, Codeclimate etc.)
 - [ ] Sentry
 - [ ] Feature Toggling
