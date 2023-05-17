@@ -69,6 +69,12 @@ Each repository has a README.md with description, relevant details to setup and 
      - Start app: `make run`
      - Run `ab`: `docker run --rm jordi/ab -s 5 -k -c 500 -n 10000 http://host.docker.internal:8080/ping`
      - Why `ab` in docker? Because of [issues](https://serverfault.com/questions/806585/why-is-ab-erroring-with-apr-socket-recv-connection-reset-by-peer-54-on-osx) with ab in macos.
+     - Time per request (mean):
+       - Time per concurrent block `(-c)`
+       - A.K.A. Average time taken per `(-c)` requests
+     - Time per request (mean, across all concurrent requests):
+       - Total Time / Total No of Requests
+       - A.K.A. Average time taken for single request
 
    **Miscellaneous**:
 
