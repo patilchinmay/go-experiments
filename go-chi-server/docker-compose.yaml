@@ -9,6 +9,14 @@ services:
       target: run
     ports:
       - "8080:8080"
-    environment:
-      HOST: 0.0.0.0
-      # docker compose automatically loads env vars from .env file
+    # env_file: .env
+    deploy:
+      resources:
+        reservations:
+          # These are guaranteed to have
+          cpus: '0.50' # 50% CPU time of a single core
+          memory: 50M # 50 MB Memory
+        limits:
+          # These are upper limits after which throttling will take place
+          cpus: '1'
+          memory: 100M
