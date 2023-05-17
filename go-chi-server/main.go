@@ -4,11 +4,13 @@ import (
 	"context"
 	"os"
 	"os/signal"
+	"runtime"
 	"strconv"
 
 	"github.com/go-chi/httplog"
 	"github.com/joho/godotenv"
 	"github.com/patilchinmay/go-experiments/go-chi-server/app"
+	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/goroutineid"
 	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/ping"
 	"github.com/patilchinmay/go-experiments/go-chi-server/server"
 )
@@ -69,6 +71,11 @@ func main() {
 			"env": env,
 		},
 	})
+
+	// Set resources
+	numCPU := runtime.NumCPU()
+	runtime.GOMAXPROCS(numCPU)
+	logger.Info().Int("numCPU", numCPU).Msg("Available resources")
 
 	// Create app with routes handlers (uses builder pattern)
 	app := app.GetOrCreate().WithLogger(logger).SetupCORS().SetupMiddlewares().SetupNotFoundHandler()
