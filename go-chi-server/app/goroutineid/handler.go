@@ -22,7 +22,7 @@ func (g *Goroutinecheck) goid() int {
 	return id
 }
 
-// Ping is the handler for GET /ping
+// CheckGoroutineID is the handler for GET /goroutinecheck
 func (g *Goroutinecheck) CheckGoroutineID(w http.ResponseWriter, r *http.Request) {
 	oplog := httplog.LogEntry(r.Context())
 
