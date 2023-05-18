@@ -52,6 +52,8 @@ var _ = Describe("Ping", func() {
 			res, bodystring := testhelpers.DoRequest(opt)
 			Expect(res.StatusCode).To(Equal(http.StatusOK))
 			Expect(bodystring).To(ContainSubstring(`"Ping":"Pong"`))
+			Expect(res).To(HaveHTTPHeaderWithValue("Content-Type", "application/json"))
+			Expect(res).To(HaveHTTPHeaderWithValue("Requestid", SatisfyAll(Not(BeNil()), Not(Equal("")))))
 		})
 	})
 })
