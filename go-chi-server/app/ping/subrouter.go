@@ -27,7 +27,8 @@ func GetOrCreate() *Subrouter {
 // InitializeRoutes associates the http.HandlerFuncs
 // from Subrouter package and http.Method with Subrouter.Subrouter
 func (sr *Subrouter) InitializeRoutes() *Subrouter {
-	sr.Subrouter.Get("/", sr.Ping)
+	p := Ping{}
+	sr.Subrouter.Get("/", p.Ping)
 
 	return sr
 }

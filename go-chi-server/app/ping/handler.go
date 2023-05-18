@@ -8,8 +8,11 @@ import (
 	"github.com/go-chi/httplog"
 )
 
+type Ping struct {
+}
+
 // Ping is the handler for GET /ping
-func (sr *Subrouter) Ping(w http.ResponseWriter, r *http.Request) {
+func (p *Ping) Ping(w http.ResponseWriter, r *http.Request) {
 	oplog := httplog.LogEntry(r.Context())
 	oplog.Debug().Msg("Pong")
 
