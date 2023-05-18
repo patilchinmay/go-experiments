@@ -5,50 +5,50 @@ import (
 	"github.com/patilchinmay/go-experiments/go-chi-server/app"
 )
 
-// Ping implements app.Subrouter interface
-type Ping struct {
+// Subrouter implements app.Subrouter interface
+type Subrouter struct {
 	Path      string
 	Subrouter chi.Router
 }
 
-var ping *Ping
+var subrouter *Subrouter
 
-// GetOrCreate returns a singleton instance of Ping
-func GetOrCreate() *Ping {
-	if ping == nil {
-		ping = &Ping{
+// GetOrCreate returns a singleton instance of Subrouter
+func GetOrCreate() *Subrouter {
+	if subrouter == nil {
+		subrouter = &Subrouter{
 			Path:      "/ping",
 			Subrouter: chi.NewRouter(),
 		}
 	}
-	return ping
+	return subrouter
 }
 
 // InitializeRoutes associates the http.HandlerFuncs
-// from Ping package and http.Method with Ping.Subrouter
-func (p *Ping) InitializeRoutes() *Ping {
-	p.Subrouter.Get("/", p.Ping) // GET /ping
+// from Subrouter package and http.Method with Subrouter.Subrouter
+func (sr *Subrouter) InitializeRoutes() *Subrouter {
+	sr.Subrouter.Get("/", sr.Ping)
 
-	return p
+	return sr
 }
 
-// MountOn mounts the Ping.Subrouter onto r (the main router)
-func (p *Ping) MountOn(r chi.Router) {
-	r.Mount(p.Path, p.Subrouter) // r is the main router
+// MountOn mounts the Subrouter.Subrouter onto r (the main router)
+func (sr *Subrouter) MountOn(r chi.Router) {
+	r.Mount(sr.Path, sr.Subrouter) // r is the main router
 }
 
-// Getpath returns the Ping.Path
-func (p *Ping) Getpath() string {
-	return p.Path
+// Getpath returns the Subrouter.Path
+func (sr *Subrouter) Getpath() string {
+	return sr.Path
 }
 
-// init initializes the ping subrouter and
+// init initializes the subrouter and
 // appends it to the []app.Subrouters as side-effects.
 // This function will be executed automatically
 // when this package is imported (as a dash import/blank identifier).
 func init() {
-	// Create ping subrouter with routes
-	ping := GetOrCreate().InitializeRoutes()
-	// Append the ping subrouter to []app.Subrouters
-	app.GetOrCreate().AppendSubrouter(ping)
+	// Create subrouter with routes
+	subrouter := GetOrCreate().InitializeRoutes()
+	// Append the subrouter subrouter to []app.Subrouters
+	app.GetOrCreate().AppendSubrouter(subrouter)
 }

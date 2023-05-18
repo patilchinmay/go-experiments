@@ -9,7 +9,7 @@ import (
 )
 
 // Ping is the handler for GET /ping
-func (p *Ping) Ping(w http.ResponseWriter, r *http.Request) {
+func (sr *Subrouter) Ping(w http.ResponseWriter, r *http.Request) {
 	oplog := httplog.LogEntry(r.Context())
 	oplog.Debug().Msg("Pong")
 
