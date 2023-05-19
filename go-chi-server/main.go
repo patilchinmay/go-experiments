@@ -12,6 +12,7 @@ import (
 	"github.com/patilchinmay/go-experiments/go-chi-server/app"
 	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/goroutineid"
 	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/ping"
+	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/validator"
 	"github.com/patilchinmay/go-experiments/go-chi-server/server"
 )
 

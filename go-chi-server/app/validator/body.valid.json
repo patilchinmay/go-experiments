@@ -1,0 +1,15 @@
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "age": 30,
+  "email": "johndoe@example.com",
+  "favourite_color": "#702963",
+  "address": [
+    {
+      "street": "somestreet",
+      "city": "somecity",
+      "planet": "mars",
+      "phone": "0111222333"
+    }
+  ]
+}
