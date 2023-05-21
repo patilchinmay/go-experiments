@@ -36,10 +36,11 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] HTTP Request Logging (`httplog`).
    - [x] Configurable app logging (`zerolog`).
    - [x] End-to-end unique request id.
+     - [x] **Middlewares:**
      - If the incoming request contains non-empty `X-Request-Id` header with value, it will be used.
      - Otherwise a unique id will be created using go-chi [RequestID](https://github.com/go-chi/chi/blob/master/middleware/request_id.go) middleware.
      - [RequestID](https://github.com/go-chi/chi/blob/master/middleware/request_id.go) is automatically set by `httplog.RequestLogger` in `go-chi-server/app/app.go:SetupMiddlewares()`.
-     - Example in `GET /ping`.
+     - All responses contain `Request-Id` header. This header is added using the custom middleware `go-chi-server/app/middlewares/requestid.go`.
 
    **Configuration:**
 
@@ -109,7 +110,6 @@ Each repository has a README.md with description, relevant details to setup and 
 - [ ] Input parameter validation/sanitization
 - [ ] Parameter Object
 - [ ] Context parameter
-- [ ] Middleware
 - [ ] JSON handling
 - [ ] Route Versioning
 - [ ] Cloud Native Golang Constructs e.g. retry, switch-breaker etc.
