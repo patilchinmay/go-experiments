@@ -40,7 +40,7 @@ repos:
       - id: yamllint
         args:
           - "--no-warnings"
-          - "-d {rules: {line-length: {max: 80, level: warning}},extends: default}"
+          - "-d {rules: {line-length: {max: 80, level: warning}, brackets: {max-spaces-inside: 1}},extends: default}"
 
   # Dockerfile
   - repo: https://github.com/hadolint/hadolint
