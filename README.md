@@ -28,8 +28,8 @@ Each repository has a README.md with description, relevant details to setup and 
 
    **Software Patterns:**
 
-   - [x] `**Singleton**`: Creation of App and Server.
-   - [x] `**Builder**`: App and Server setup with different methods such as `WithLogger, WithHost, WithPort etc.`.
+   - [x] **`Singleton`**: Creation of App and Server.
+   - [x] **`Builder`**: App and Server setup with different methods such as `WithLogger, WithHost, WithPort etc.`.
 
    **Traceability:**
 
