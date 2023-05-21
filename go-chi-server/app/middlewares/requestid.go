@@ -14,7 +14,7 @@ func RequestID(next http.Handler) http.Handler {
 		requestID := middleware.GetReqID(r.Context())
 		// oplog.Debug().Str("requestID", requestID).Msg("")
 
-		w.Header().Set("requestID", requestID)
+		w.Header().Set("Request-ID", requestID)
 		next.ServeHTTP(w, r)
 	})
 }
