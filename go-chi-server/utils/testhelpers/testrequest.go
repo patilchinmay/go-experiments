@@ -67,6 +67,8 @@ func DoRequest(opt *HttpOptions) (*http.Response, string) {
 	}
 	defer resp.Body.Close()
 
+	Expect(resp).To(HaveHTTPHeaderWithValue("Request-Id", SatisfyAll(Not(BeNil()), Not(Equal("")))))
+
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		Expect(err).ShouldNot(HaveOccurred())

@@ -53,7 +53,6 @@ var _ = Describe("Ping", func() {
 			Expect(res.StatusCode).To(Equal(http.StatusOK))
 			Expect(bodystring).To(ContainSubstring(`"Ping":"Pong"`))
 			Expect(res).To(HaveHTTPHeaderWithValue("Content-Type", "application/json"))
-			Expect(res).To(HaveHTTPHeaderWithValue("Request-Id", SatisfyAll(Not(BeNil()), Not(Equal("")))))
 		})
 	})
 })
