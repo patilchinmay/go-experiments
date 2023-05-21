@@ -5,6 +5,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httplog"
+	custommiddlewares "github.com/patilchinmay/go-experiments/go-chi-server/app/middlewares"
 	"github.com/rs/zerolog"
 )
 
@@ -46,7 +47,8 @@ func (a *App) SetupMiddlewares() *App {
 	// httplog.RequestLogger sets up RequestId and Recoverer as well
 	a.Router.Use(httplog.RequestLogger(a.logger))
 	a.Router.Use(middleware.Heartbeat("/health"))
-
+	// Add Requestid header to each request
+	a.Router.Use(custommiddlewares.RequestID)
 	return a
 }
 
