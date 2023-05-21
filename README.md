@@ -58,6 +58,14 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] Uses `nonroot` user for running application.
    - [x] Uses `distroless` image for running application.
 
+   **Database:**
+
+   - [ ] Database/ORM/Repository Layer
+   - [ ] Database disconnection/disruption
+   - [ ] DB Connection with Connection pool
+   - [ ] Atomic Transactions
+   - [ ] Example in `go-chi-server/app/users` with a REST API
+
    **Tests, Benchmark and Docs:**
 
    - [x] Tests, coverage and how to run them (`ginkgo, gomega`).
@@ -79,6 +87,7 @@ Each repository has a README.md with description, relevant details to setup and 
    **Miscellaneous**:
 
    - [x] Graceful Shutdown / OS Interrupt signal handling in `main.go`.
+   - [ ] Idle, Read and write timeout in http.Server
 
 3. [https-serving](./https-serving)
    - [x]  Base [go-chi-server](./go-chi-server/)
@@ -92,8 +101,6 @@ Each repository has a README.md with description, relevant details to setup and 
 - [ ] Parameter Object
 - [ ] Context parameter
 - [ ] Middleware
-- [ ] Database/ORM/Repository Layer
-- [ ] Database disconnection/disruption
 - [ ] JSON handling
 - [ ] Route Versioning
 - [ ] Cloud Native Golang Constructs e.g. retry, switch-breaker etc.
@@ -101,12 +108,9 @@ Each repository has a README.md with description, relevant details to setup and 
 - [ ] Sentry
 - [ ] Feature Toggling
 - [ ] UML diagram
-- [ ] DB Connection with Connection pool
 - [ ] Exposing metrics to Prometheus using go's runtime/metrics package.
 - [ ] Timing out HTTP connections
-- [ ] Handle DB disconnections
 - [ ] Forcing HTTP 2.0 / 1.2
-- [ ] Idle, Read and write timeout in http.Server
 - [ ] Verify that http.ListenAndServe fields each new request on a separate goroutine by sending multiple requests and collecting runtime/metrics.
 - [ ] Is it possible to print the goroutine ID? For simplifying above.
 - [ ] Websocket server and client. Gorilla websocket library.
