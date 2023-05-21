@@ -74,6 +74,7 @@ func main() {
 	})
 
 	// Set resources
+	// In latest golang version, GOMAXPROCS is automatically set to runtime.NumCPU
 	numCPU := runtime.NumCPU()
 	runtime.GOMAXPROCS(numCPU)
 	logger.Info().Int("numCPU", numCPU).Msg("Available resources")
@@ -81,7 +82,7 @@ func main() {
 	// Create app with routes handlers (uses builder pattern)
 	app := app.GetOrCreate().WithLogger(logger).SetupCORS().SetupMiddlewares().SetupNotFoundHandler()
 
-	// Mounts subrouters on main app/router (can also use builder pattern)
+	// Mounts subrouters on main app/router
 	app.MountSubrouters()
 
 	// Create server
