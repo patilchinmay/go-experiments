@@ -34,11 +34,14 @@ func Discard() {
 	}
 }
 
+// WithLogger sets up the logger
 func (a *App) WithLogger(logger zerolog.Logger) *App {
 	a.logger = logger
 	return a
 }
 
+// SetupMiddlewares sets up the following middlewares:
+// RequestId, Recoverer, httplog.RequestLogger, Heartbeat
 func (a *App) SetupMiddlewares() *App {
 	// httplog.RequestLogger sets up RequestId and Recoverer as well
 	a.Router.Use(httplog.RequestLogger(a.logger))
@@ -47,6 +50,7 @@ func (a *App) SetupMiddlewares() *App {
 	return a
 }
 
+// SetupCORS sets up the CORS middleware
 func (a *App) SetupCORS() *App {
 	// Basic CORS
 	// for more ideas, see: https://developer.github.com/v3/#cross-origin-resource-sharing
@@ -64,6 +68,7 @@ func (a *App) SetupCORS() *App {
 	return a
 }
 
+// SetupNotFoundHandler set up a not found route
 func (a *App) SetupNotFoundHandler() *App {
 	// https://github.com/go-chi/chi/issues/780
 	a.Router.HandleFunc("/", a.Router.NotFoundHandler())

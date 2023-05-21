@@ -10,8 +10,11 @@ import (
 	"github.com/go-chi/httplog"
 )
 
+type Goroutineid struct {
+}
+
 // goid returns the id of the current goroutine
-func (g *Goroutinecheck) goid() int {
+func (g *Goroutineid) goid() int {
 	var buf [64]byte
 	n := runtime.Stack(buf[:], false)
 	idField := strings.Fields(strings.TrimPrefix(string(buf[:n]), "goroutine "))[0]
@@ -23,7 +26,7 @@ func (g *Goroutinecheck) goid() int {
 }
 
 // CheckGoroutineID is the handler for GET /goroutinecheck
-func (g *Goroutinecheck) CheckGoroutineID(w http.ResponseWriter, r *http.Request) {
+func (g *Goroutineid) CheckGoroutineID(w http.ResponseWriter, r *http.Request) {
 	oplog := httplog.LogEntry(r.Context())
 
 	goroutineID := g.goid()
@@ -31,7 +34,6 @@ func (g *Goroutinecheck) CheckGoroutineID(w http.ResponseWriter, r *http.Request
 	oplog.Debug().Int("goroutineID", goroutineID).Msg("")
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("requestID", strconv.Itoa(goroutineID))
 
 	resp := fmt.Sprintf(`{"goroutineID":%d}`, goroutineID)
 

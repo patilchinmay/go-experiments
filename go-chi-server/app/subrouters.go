@@ -4,12 +4,20 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-// Subrouter is implemented by all subrouters
-// App exclusively works with Subrouter interface
-// rather than concrete subrouters (Liskov Substitution Principle)
-type Subrouter interface {
-	MountOn(chi.Router)
-	Getpath() string
+// Subrouter definition
+type Subrouter struct {
+	Path      string
+	Subrouter chi.Router
+}
+
+// NewSubrouter is a constructor for Subrouter
+func NewSubrouter(mountpath string) Subrouter {
+	var sr = Subrouter{
+		Path:      mountpath,
+		Subrouter: chi.NewRouter(),
+	}
+
+	return sr
 }
 
 // AppendSubrouter appends the subrouter to app.Subrouters
@@ -22,11 +30,12 @@ func (a *App) AppendSubrouter(sr Subrouter) *App {
 	return a
 }
 
-// MountSubrouters initializes and
-// registers the subrouters onto the main router
+// MountSubrouters initializes and registers
+// the subrouters onto the main router.
+// Middlewares must be defined before this function is called.
 func (a *App) MountSubrouters() {
 	for _, sr := range a.Subrouters {
-		sr.MountOn(a.Router)
-		a.logger.Debug().Str("path", sr.Getpath()).Msg("Registered subrouter")
+		a.Router.Mount(sr.Path, sr.Subrouter)
+		a.logger.Debug().Str("path", sr.Path).Msg("Registered subrouter")
 	}
 }
