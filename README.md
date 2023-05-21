@@ -60,10 +60,16 @@ Each repository has a README.md with description, relevant details to setup and 
      - This makes sure that we reuse the cache for dependencies layer (even if there is a change in the application code).
    - [x] Uses `nonroot` user for running application.
    - [x] Uses `distroless` image for running application.
+   - [x] Database
+     - [x] Dockerized `Postgres` and `Pgadmin`.
+     - [x] Healthcheck for `Postgres`.
+     - [x] `depends_on` check for dependent services.
 
    **Database:**
 
-   - [ ] Database/ORM/Repository Layer
+   - [ ] Service + Repository Layer
+   - [ ] Database ORM ([gorm](https://github.com/go-gorm/gorm))
+   - [ ] Migrations ([golang-migrate](https://github.com/golang-migrate/migrate))
    - [ ] Database disconnection/disruption
    - [ ] DB Connection with Connection pool
    - [ ] Atomic Transactions
