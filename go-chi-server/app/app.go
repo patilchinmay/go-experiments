@@ -46,7 +46,7 @@ func (a *App) WithLogger(logger zerolog.Logger) *App {
 func (a *App) SetupMiddlewares() *App {
 	// httplog.RequestLogger sets up RequestId and Recoverer as well
 	a.Router.Use(httplog.RequestLogger(a.logger))
-	// Add Requestid header to each request
+	// Add Request-Id header to each request
 	a.Router.Use(custommiddlewares.RequestID)
 	a.Router.Use(middleware.Heartbeat("/health"))
 	return a
