@@ -11,10 +11,11 @@ import (
 )
 
 type ServerConfig struct {
-	Host        string        `env:"HOST,overwrite,default=0.0.0.0"`
-	Port        string        `env:"PORT,overwrite,default=8080"`
-	ReadTimeout time.Duration `env:"READ_TIMEOUT,overwrite,default=5s"`
-	// HTTPS       bool          `env:"HTTPS,required"`
+	Host         string        `env:"HOST,overwrite,default=0.0.0.0"`
+	Port         string        `env:"PORT,overwrite,default=8080"`
+	ReadTimeout  time.Duration `env:"READ_TIMEOUT,overwrite,default=5s"`   // the maximum duration for reading the entire request, including the body
+	WriteTimeout time.Duration `env:"WRITE_TIMEOUT,overwrite,default=10s"` // the maximum duration before timing out writes of the response
+	IdleTimeout  time.Duration `env:"IDLE_TIMEOUT,overwrite,default=30s"`  // the maximum amount of time to wait for the next request when keep-alive is enabled
 }
 
 // Why struct?
@@ -49,7 +50,9 @@ func New() *Server {
 		ServerConfig: serverConfig,
 		logger:       logger,
 		server: http.Server{
-			ReadTimeout: serverConfig.ReadTimeout,
+			ReadTimeout:  serverConfig.ReadTimeout,
+			WriteTimeout: serverConfig.WriteTimeout,
+			IdleTimeout:  serverConfig.IdleTimeout,
 		},
 	}
 

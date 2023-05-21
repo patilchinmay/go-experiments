@@ -90,7 +90,7 @@ Each repository has a README.md with description, relevant details to setup and 
    **Miscellaneous**:
 
    - [x] Graceful Shutdown / OS Interrupt signal handling in `main.go`.
-   - [ ] Idle, Read and write timeout in http.Server
+   - [x] Idle, Read and write timeout in http.Server
 
 3. [https-serving](./https-serving)
    - [x]  Base [go-chi-server](./go-chi-server/)
