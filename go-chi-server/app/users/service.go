@@ -1,4 +1,4 @@
 package user
 
-type userService struct {
+type UserService struct {
 }
