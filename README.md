@@ -22,11 +22,11 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] Creation of App and Server using `Singleton` pattern.
    - [x] `Builder` pattern for App and Server setup with different methods such as `WithLogger, WithHost, WithPort etc.`.
    - [x] Implicit route registration.
-     - Uses `Subrouter (go-chi-server/app/subrouters.go)` interface.
+     - Uses `Subrouter (go-chi-server/app/subrouters.go)` struct.
      - Registers the subrouter using side-effects (blank identifier import) in `main.go`.
      - `[]App.Subrouters` maintains a list of all `Subrouters` and mounts them using `App.MountSubrouters()`.
-     - E.g. `go-chi-server/app/ping` package implements the `Subrouter` interface.
-     - It has an `init()` for side-effect driven registration.
+     - E.g. `go-chi-server/app/ping` package creates and configures its own `Subrouter` in the `init()` function.
+     - This is a side-effect driven registration for subrouter onto main router.
 
    **Traceability:**
 
