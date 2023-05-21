@@ -19,14 +19,17 @@ Each repository has a README.md with description, relevant details to setup and 
 
    - [x] Basic Go-chi Server (`BCS`)
    - [x] Separation of App and Server. This is a good practice and makes testing easier.
-   - [x] Creation of App and Server using `Singleton` pattern.
-   - [x] `Builder` pattern for App and Server setup with different methods such as `WithLogger, WithHost, WithPort etc.`.
    - [x] Implicit route registration.
      - Uses `Subrouter (go-chi-server/app/subrouters.go)` struct.
      - Registers the subrouter using side-effects (blank identifier import) in `main.go`.
      - `[]App.Subrouters` maintains a list of all `Subrouters` and mounts them using `App.MountSubrouters()`.
      - E.g. `go-chi-server/app/ping` package creates and configures its own `Subrouter` in the `init()` function.
      - This is a side-effect driven registration for subrouter onto main router.
+
+   **Software Patterns:**
+
+   - [x] `**Singleton**`: Creation of App and Server.
+   - [x] `**Builder**`: App and Server setup with different methods such as `WithLogger, WithHost, WithPort etc.`.
 
    **Traceability:**
 
