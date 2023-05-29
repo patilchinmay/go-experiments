@@ -14,7 +14,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    # env_file: .env
+    env_file: .env
     networks:
       - backend
     deploy:
@@ -35,7 +35,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres} # use the value defined in POSTGRES_USER env var. If not present, use 'postgres'
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-      POSTGRES_DB: ${POSTGRES_DB:-users} # automatically create this db
+      POSTGRES_DB: ${POSTGRES_DB:-go_experiments} # automatically create this db
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres

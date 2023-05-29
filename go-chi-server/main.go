@@ -14,8 +14,17 @@ import (
 	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/ping"
 	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/users"
 	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/validator"
+	"github.com/patilchinmay/go-experiments/go-chi-server/db"
 	"github.com/patilchinmay/go-experiments/go-chi-server/server"
+	"github.com/rs/zerolog"
+	"gorm.io/gorm"
 )
+
+func initializeDB(logger zerolog.Logger) *gorm.DB {
+	Db := db.New(logger)
+
+	return Db.DB
+}
 
 func main() {
 	// Create context that listens for the interrupt signal from the OS.
@@ -79,6 +88,9 @@ func main() {
 	numCPU := runtime.NumCPU()
 	runtime.GOMAXPROCS(numCPU)
 	logger.Info().Int("numCPU", numCPU).Msg("Available resources")
+
+	// Initialize Database (for dependency injection)
+	_ = initializeDB(logger)
 
 	// Create app with routes handlers (uses builder pattern)
 	app := app.GetOrCreate().WithLogger(logger).SetupCORS().SetupMiddlewares().SetupNotFoundHandler()
