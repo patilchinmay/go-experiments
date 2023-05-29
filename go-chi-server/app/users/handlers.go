@@ -6,11 +6,11 @@ import (
 	"github.com/go-chi/httplog"
 )
 
-type User struct {
+type Users struct {
 }
 
 // Get is the handler for GET /user
-func (u *User) Get(w http.ResponseWriter, r *http.Request) {
+func (u *Users) Get(w http.ResponseWriter, r *http.Request) {
 	oplog := httplog.LogEntry(r.Context())
 	oplog.Debug().Msg("Get User")
 
@@ -22,7 +22,7 @@ func (u *User) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 // Add is the handler for POST /user
-func (u *User) Add(w http.ResponseWriter, r *http.Request) {
+func (u *Users) Add(w http.ResponseWriter, r *http.Request) {
 	oplog := httplog.LogEntry(r.Context())
 	oplog.Debug().Msg("Add User")
 

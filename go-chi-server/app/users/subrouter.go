@@ -15,7 +15,7 @@ func init() {
 	sr := app.NewSubrouter(path)
 
 	// Register methods
-	u := User{}
+	u := Users{}
 
 	// Define the routes on subrouter
 	// All the routes here have a prefix of
