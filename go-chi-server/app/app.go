@@ -7,11 +7,13 @@ import (
 	"github.com/go-chi/httplog"
 	custommiddlewares "github.com/patilchinmay/go-experiments/go-chi-server/app/middlewares"
 	"github.com/rs/zerolog"
+	"gorm.io/gorm"
 )
 
 type App struct {
 	logger     zerolog.Logger
 	Router     *chi.Mux
+	DB         *gorm.DB
 	Subrouters []Subrouter
 }
 
@@ -26,6 +28,12 @@ func GetOrCreate() *App {
 		}
 	}
 	return app
+}
+
+// SetupDB will setup the db using the instance passed as the parameter
+func (a *App) SetupDB(DB *gorm.DB) *App {
+	a.DB = DB
+	return a
 }
 
 // Discard will remove the reference to app so that it can be garbage collected. In other words, it deletes the singleton instance of *App.
