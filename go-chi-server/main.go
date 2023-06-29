@@ -5,26 +5,19 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
-	"strconv"
 
 	"github.com/go-chi/httplog"
 	"github.com/joho/godotenv"
 	"github.com/patilchinmay/go-experiments/go-chi-server/app"
 	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/goroutineid"
 	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/ping"
-	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/users"
+	"github.com/patilchinmay/go-experiments/go-chi-server/app/user"
 	_ "github.com/patilchinmay/go-experiments/go-chi-server/app/validator"
 	"github.com/patilchinmay/go-experiments/go-chi-server/db"
 	"github.com/patilchinmay/go-experiments/go-chi-server/server"
+	globallogger "github.com/patilchinmay/go-experiments/go-chi-server/utils/logger"
 	"github.com/rs/zerolog"
-	"gorm.io/gorm"
 )
-
-func initializeDB(logger zerolog.Logger) *gorm.DB {
-	Db := db.New(logger)
-
-	return Db.DB
-}
 
 func main() {
 	// Create context that listens for the interrupt signal from the OS.
@@ -50,38 +43,8 @@ func main() {
 	env := os.Getenv("ENV")
 	logger.Info().Str("ENV", env).Msg("")
 
-	// json logging
-	jsonLogs, err := strconv.ParseBool(os.Getenv("JSONLOGS"))
-	if err != nil {
-		jsonLogs = true
-		logger.Error().Msg("Failed to parse JSONLOGS, setting default jsonLogs to true")
-	}
-
-	// log level setting and validation
-	logLevel := os.Getenv("LOGLEVEL")
-	switch logLevel {
-	case
-		"trace",
-		"debug",
-		"info",
-		"warn",
-		"error",
-		"critical":
-		logger.Info().Str("logLevel", logLevel).Msg("Loaded logLevel from env var")
-	default:
-		logLevel = "info"
-		logger.Error().Msg("Invalid LOGLEVEL, setting default logLevel to info")
-	}
-
 	// Redefine Logger with proper config
-	logger = httplog.NewLogger("My App", httplog.Options{
-		JSON:     jsonLogs,
-		Concise:  true,
-		LogLevel: logLevel,
-		Tags: map[string]string{
-			"env": env,
-		},
-	})
+	logger = globallogger.InitiateLogger()
 
 	// Set resources
 	// In latest golang version, GOMAXPROCS is automatically set to runtime.NumCPU
@@ -90,10 +53,13 @@ func main() {
 	logger.Info().Int("numCPU", numCPU).Msg("Available resources")
 
 	// Initialize Database (for dependency injection)
-	_ = initializeDB(logger)
+	Db := initializeDB(logger)
 
 	// Create app with routes handlers (uses builder pattern)
-	app := app.GetOrCreate().WithLogger(logger).SetupCORS().SetupMiddlewares().SetupNotFoundHandler()
+	app := app.GetOrCreate().SetupDB(Db.DB).WithLogger(logger).SetupCORS().SetupMiddlewares().SetupNotFoundHandler()
+
+	// Create and setup user subrouter
+	user.SetupSubrouter(app.DB, logger)
 
 	// Mounts subrouters on main app/router
 	app.MountSubrouters()
@@ -113,4 +79,10 @@ func main() {
 	// Received interrupt signal. Proceed to graceful shutdown
 	logger.Info().Msg("Received interrupt, shutting down gracefully")
 	server.Shutdown()
+}
+
+func initializeDB(logger zerolog.Logger) *db.Database {
+	Db := db.New(logger)
+
+	return Db
 }
