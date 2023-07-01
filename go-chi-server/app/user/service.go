@@ -24,19 +24,23 @@ func NewUserService(usrrepo *UserRepository) *UserService {
 	return usrsvc
 }
 
-func (u *UserService) get(ctx context.Context) string {
+func (u *UserService) get(ctx context.Context, id uint) (User, error) {
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Get")
 
-	resp := `{"User":"Get"}`
-	return resp
+	// Call the repository layer
+	user, err := u.usrrepo.Get(ctx, id)
+	if err != nil {
+		return User{}, err
+	}
+
+	return user, nil
 }
 
 func (u *UserService) add(ctx context.Context, user User) (uint, error) {
 	//  Setup logger
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Add")
-	logger.Debug().Fields(user)
 
 	// Validate the input
 	err := v.Validator.Struct(user)

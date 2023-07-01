@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog"
 )
 
@@ -24,16 +25,39 @@ func NewUserHandler(usrsvc *UserService) *UserHandler {
 	return userHandler
 }
 
-// Get is the handler for GET /user
+// Get is the handler for GET /user/{id}
 func (u *UserHandler) Get(w http.ResponseWriter, r *http.Request) {
 	oplog := httplog.LogEntry(r.Context())
 	oplog.Debug().Msg("Get User")
 
-	resp := u.usrsvc.get(r.Context())
+	// Retrieve the path param of id. id is string here.
+	idstr := chi.URLParam(r, "id")
+	if idstr == "" {
+		http.Error(w, "Missing id", http.StatusBadRequest)
+		oplog.Error().Msg("Missing id")
+		return
+	}
+
+	// convert id to uint (as expected by the service layer)
+	id64, err := strconv.ParseUint(idstr, 10, 32)
+	if err != nil {
+		http.Error(w, "Invalid id", http.StatusBadRequest)
+		oplog.Error().Msg("Invalid id")
+		return
+	}
+	id := uint(id64)
+
+	// Call the service layer and retrieve the user
+	user, err := u.usrsvc.get(r.Context(), id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		oplog.Error().Err(err).Msg("Failed to get user")
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(resp))
+	json.NewEncoder(w).Encode(user)
 }
 
 // Add is the handler for POST /user
@@ -68,6 +92,6 @@ func (u *UserHandler) Add(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return the response
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(strconv.FormatUint(uint64(resp), 10)))
 }

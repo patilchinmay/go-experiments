@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -22,6 +23,18 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 		usrrepo.db.AutoMigrate(&User{})
 	}
 	return usrrepo
+}
+
+func (ur *UserRepository) Get(ctx context.Context, id uint) (User, error) {
+	var user User
+
+	ur.db.Debug().Omit("Age").First(&user, id) // Example of printing the query and ignoring a field
+
+	if (user == User{}) {
+		return User{}, errors.New("Not found")
+	}
+
+	return user, nil
 }
 
 func (ur *UserRepository) Add(ctx context.Context, user User) (uint, error) {

@@ -27,7 +27,7 @@ func SetupSubrouter(db *gorm.DB, logger zerolog.Logger) {
 	// Define the routes on subrouter
 	// All the routes here have a prefix of
 	// path defined above.
-	sr.Subrouter.Get("/", usrhandler.Get)
+	sr.Subrouter.Get("/{id}", usrhandler.Get)
 	sr.Subrouter.Post("/", usrhandler.Add)
 
 	// Append to app
