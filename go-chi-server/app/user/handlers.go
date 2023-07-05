@@ -31,21 +31,12 @@ func (u *UserHandler) Get(w http.ResponseWriter, r *http.Request) {
 	oplog.Debug().Msg("Get User")
 
 	// Retrieve the path param of id. id is string here.
-	idstr := chi.URLParam(r, "id")
-	if idstr == "" {
+	id := chi.URLParam(r, "id")
+	if id == "" {
 		http.Error(w, "Missing id", http.StatusBadRequest)
 		oplog.Error().Msg("Missing id")
 		return
 	}
-
-	// convert id to uint (as expected by the service layer)
-	id64, err := strconv.ParseUint(idstr, 10, 32)
-	if err != nil {
-		http.Error(w, "Invalid id", http.StatusBadRequest)
-		oplog.Error().Msg("Invalid id")
-		return
-	}
-	id := uint(id64)
 
 	// Call the service layer and retrieve the user
 	user, err := u.usrsvc.get(r.Context(), id)
@@ -94,4 +85,29 @@ func (u *UserHandler) Add(w http.ResponseWriter, r *http.Request) {
 	// Return the response
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(strconv.FormatUint(uint64(resp), 10)))
+}
+
+// Get is the handler for DELETE /user/{id}
+func (u *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	oplog := httplog.LogEntry(r.Context())
+	oplog.Debug().Msg("Delete User")
+
+	// Retrieve the path param of id. id is string here.
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		http.Error(w, "Missing id", http.StatusBadRequest)
+		oplog.Error().Msg("Missing id")
+		return
+	}
+
+	// Call the service layer and retrieve the user
+	err := u.usrsvc.delete(r.Context(), id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		oplog.Error().Err(err).Msg("Failed to delete user")
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 }

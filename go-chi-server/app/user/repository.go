@@ -25,7 +25,7 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	return usrrepo
 }
 
-func (ur *UserRepository) Get(ctx context.Context, id uint) (User, error) {
+func (ur *UserRepository) Get(ctx context.Context, id string) (User, error) {
 	var user User
 
 	ur.db.Debug().Omit("Age").First(&user, id) // Example of printing the query and ignoring a field
@@ -45,4 +45,14 @@ func (ur *UserRepository) Add(ctx context.Context, user User) (uint, error) {
 	}
 
 	return user.ID, nil
+}
+
+func (ur *UserRepository) Delete(ctx context.Context, id string) error {
+	result := ur.db.Delete(&User{}, id) // this is soft delete
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }

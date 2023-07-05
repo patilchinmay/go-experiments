@@ -24,7 +24,7 @@ func NewUserService(usrrepo *UserRepository) *UserService {
 	return usrsvc
 }
 
-func (u *UserService) get(ctx context.Context, id uint) (User, error) {
+func (u *UserService) get(ctx context.Context, id string) (User, error) {
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Get")
 
@@ -71,4 +71,17 @@ func (u *UserService) add(ctx context.Context, user User) (uint, error) {
 	// return the response
 	// resp := `{"User":"Add"}`
 	return id, nil
+}
+
+func (u *UserService) delete(ctx context.Context, id string) error {
+	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
+	logger.Debug().Msg("User Service : Delete")
+
+	// Call the repository layer
+	err := u.usrrepo.Delete(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
