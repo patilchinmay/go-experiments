@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/rs/zerolog"
 	"github.com/sethvargo/go-envconfig"
@@ -35,6 +36,7 @@ func New(logger zerolog.Logger) *Database {
 
 		database.loadCredentials()
 		database.connect()
+		database.setupConnectionPool()
 	}
 	return database
 }
@@ -61,4 +63,20 @@ func (d *Database) connect() {
 	}
 
 	d.logger.Debug().Msg("Connected to database")
+}
+
+func (d *Database) setupConnectionPool() {
+	sqlDB, err := d.DB.DB()
+	if err != nil {
+		d.logger.Fatal().Err(err).Msg("Failed to get database instance")
+	}
+
+	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
+	sqlDB.SetMaxIdleConns(10)
+
+	// SetMaxOpenConns sets the maximum number of open connections to the database.
+	sqlDB.SetMaxOpenConns(100)
+
+	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+	sqlDB.SetConnMaxLifetime(time.Hour)
 }
