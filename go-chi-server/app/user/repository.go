@@ -28,7 +28,11 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 func (ur *UserRepository) Get(ctx context.Context, id string) (User, error) {
 	var user User
 
-	ur.db.Debug().Omit("Age").First(&user, id) // Example of printing the query and ignoring a field
+	result := ur.db.Debug().Omit("Age").First(&user, id) // Example of printing the query and ignoring a field
+
+	if result.Error != nil {
+		return user, result.Error
+	}
 
 	if (user == User{}) {
 		return User{}, errors.New("Not found")
