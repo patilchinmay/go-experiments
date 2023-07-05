@@ -68,13 +68,13 @@ Each repository has a README.md with description, relevant details to setup and 
 
    **Database:**
 
-   - [ ] Service + Repository Layer
-   - [ ] Database ORM ([gorm](https://github.com/go-gorm/gorm))
+   - [x] Service + Repository Layer
+   - [x] Database ORM ([gorm](https://github.com/go-gorm/gorm))
    - [ ] Migrations ([golang-migrate](https://github.com/golang-migrate/migrate))
    - [ ] Database disconnection/disruption
    - [ ] DB Connection with Connection pool
    - [ ] Atomic Transactions
-   - [ ] Example in `go-chi-server/app/users` with a REST API
+   - [x] Example in `go-chi-server/app/users` with a REST API
 
    **Tests, Benchmark and Docs:**
 
