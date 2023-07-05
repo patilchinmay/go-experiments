@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"errors"
 
 	"gorm.io/gorm"
 )
@@ -32,10 +31,6 @@ func (ur *UserRepository) Get(ctx context.Context, id string) (User, error) {
 
 	if result.Error != nil {
 		return user, result.Error
-	}
-
-	if (user == User{}) {
-		return User{}, errors.New("Not found")
 	}
 
 	return user, nil
