@@ -12,19 +12,28 @@ type UserRepository struct {
 
 var usrrepo *UserRepository
 
-func NewUserRepository(db *gorm.DB) *UserRepository {
+func NewUserRepository(db *gorm.DB, automigrate bool) *UserRepository {
 	if usrrepo == nil {
 		usrrepo = &UserRepository{
 			db: db,
 		}
 
-		// automigrate the user table
-		usrrepo.db.AutoMigrate(&User{})
+		if automigrate {
+			// automigrate the user table
+			usrrepo.db.AutoMigrate(&User{})
+		}
 	}
 	return usrrepo
 }
 
-func (ur *UserRepository) Get(ctx context.Context, id string) (User, error) {
+// DiscardUserRepository will remove the reference to usrrepo so that it can be garbage collected. In other words, it deletes the singleton instance of *UserRepository.
+func DiscardUserRepository() {
+	if usrrepo != nil {
+		usrrepo = nil
+	}
+}
+
+func (ur *UserRepository) Get(ctx context.Context, id uint) (User, error) {
 	var user User
 
 	result := ur.db.Debug().Omit("Age").First(&user, id) // Example of printing the query and ignoring a field

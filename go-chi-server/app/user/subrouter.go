@@ -16,7 +16,8 @@ func SetupSubrouter(db *gorm.DB, logger zerolog.Logger) {
 	sr := app.NewSubrouter(path)
 
 	// Initiate User Repository Layer
-	usrrepo := NewUserRepository(db)
+	automigrateUser := true
+	usrrepo := NewUserRepository(db, automigrateUser)
 
 	// Initiate User Service
 	usrsvc := NewUserService(usrrepo)
