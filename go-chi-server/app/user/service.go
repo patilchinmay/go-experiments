@@ -73,7 +73,7 @@ func (u *UserService) add(ctx context.Context, user User) (uint, error) {
 	return id, nil
 }
 
-func (u *UserService) delete(ctx context.Context, id string) error {
+func (u *UserService) delete(ctx context.Context, id uint) error {
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Delete")
 

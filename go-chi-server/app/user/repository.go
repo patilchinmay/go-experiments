@@ -36,7 +36,8 @@ func DiscardUserRepository() {
 func (ur *UserRepository) Get(ctx context.Context, id uint) (User, error) {
 	var user User
 
-	result := ur.db.Debug().Omit("Age").First(&user, id) // Example of printing the query and ignoring a field
+	result := ur.db.First(&user, id)
+	// result := ur.db.Debug().Omit("Age").First(&user, id) // Example of printing the query and ignoring a field
 
 	if result.Error != nil {
 		return user, result.Error
@@ -55,7 +56,7 @@ func (ur *UserRepository) Add(ctx context.Context, user User) (uint, error) {
 	return user.ID, nil
 }
 
-func (ur *UserRepository) Delete(ctx context.Context, id string) error {
+func (ur *UserRepository) Delete(ctx context.Context, id uint) error {
 	result := ur.db.Delete(&User{}, id) // this is soft delete
 
 	if result.Error != nil {
