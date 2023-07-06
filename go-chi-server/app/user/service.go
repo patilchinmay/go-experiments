@@ -24,7 +24,7 @@ func NewUserService(usrrepo *UserRepository) *UserService {
 	return usrsvc
 }
 
-func (u *UserService) get(ctx context.Context, id string) (User, error) {
+func (u *UserService) get(ctx context.Context, id uint) (User, error) {
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Get")
 

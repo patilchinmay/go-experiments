@@ -38,8 +38,17 @@ func (u *UserHandler) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Convert id to uint (as required by service layer)
+	u64, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid id", http.StatusBadRequest)
+		oplog.Error().Msg("Invalid id")
+		return
+	}
+	idu64 := uint(u64)
+
 	// Call the service layer and retrieve the user
-	user, err := u.usrsvc.get(r.Context(), id)
+	user, err := u.usrsvc.get(r.Context(), idu64)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		oplog.Error().Err(err).Msg("Failed to get user")
