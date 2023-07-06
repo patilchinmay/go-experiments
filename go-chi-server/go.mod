@@ -3,6 +3,7 @@ module github.com/patilchinmay/go-experiments/go-chi-server
 go 1.20
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-chi/cors v1.2.1
 	github.com/go-chi/httplog v0.3.0
@@ -12,7 +13,8 @@ require (
 	github.com/onsi/gomega v1.27.6
 	github.com/rs/zerolog v1.29.1
 	gorm.io/driver/postgres v1.5.2
-	gorm.io/gorm v1.25.1
+	gorm.io/driver/sqlite v1.5.2
+	gorm.io/gorm v1.25.2-0.20230530020048-26663ab9bf55
 )
 
 require (
@@ -25,6 +27,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.3 // indirect
+	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
 	golang.org/x/crypto v0.8.0 // indirect
 )
