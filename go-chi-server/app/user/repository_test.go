@@ -56,7 +56,7 @@ var _ = Describe("UserRepository with go-sqlmock", func() {
 				NewRows([]string{"id", "firstname", "lastname", "age", "email"}).
 				AddRow(user.ID, user.FirstName, user.LastName, user.Age, user.Email)
 
-			const sql = `SELECT "users"."id","users"."created_at","users"."updated_at","users"."deleted_at","users"."first_name","users"."last_name","users"."email" FROM "users" WHERE "users"."id" = $1 AND "users"."deleted_at" IS NULL ORDER BY "users"."id" LIMIT 1`
+			const sql = `SELECT * FROM "users" WHERE "users"."id" = $1 AND "users"."deleted_at" IS NULL ORDER BY "users"."id" LIMIT 1`
 
 			mock.ExpectQuery(regexp.QuoteMeta(sql)).WithArgs(user.ID).WillReturnRows(rows)
 
