@@ -31,6 +31,7 @@ func SetupSubrouter(db *gorm.DB, logger zerolog.Logger) {
 	sr.Subrouter.Get("/{id}", usrhandler.Get)
 	sr.Subrouter.Post("/", usrhandler.Add)
 	sr.Subrouter.Delete("/{id}", usrhandler.Delete)
+	sr.Subrouter.Patch("/{id}", usrhandler.Update) // partial update
 
 	// Append to app
 	app.GetOrCreate().AppendSubrouter(sr)

@@ -96,7 +96,7 @@ func (u *UserHandler) Add(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(strconv.FormatUint(uint64(resp), 10)))
 }
 
-// Get is the handler for DELETE /user/{id}
+// Delete is the handler for DELETE /user/{id}
 func (u *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	oplog := httplog.LogEntry(r.Context())
 	oplog.Debug().Msg("Delete User")
@@ -127,5 +127,51 @@ func (u *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+}
+
+// Update is the handler for PATCH /user/{id}
+func (u *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
+	oplog := httplog.LogEntry(r.Context())
+	oplog.Debug().Msg("Update User")
+
+	// Parse the incoming payload into json
+
+	var input UpdateUserInput
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		oplog.Error().Err(err).Msg("Failed to parse request body")
+		return
+	}
+
+	// Retrieve the path param of id. id is string here.
+	id := chi.URLParam(r, "id")
+	oplog.Debug().Str("id", id).Msg("Id")
+
+	if id == "" {
+		http.Error(w, "Missing id", http.StatusBadRequest)
+		oplog.Error().Msg("Missing id")
+		return
+	}
+
+	// Convert id to uint (as required by service layer)
+	u64, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid id", http.StatusBadRequest)
+		oplog.Error().Msg("Invalid id")
+		return
+	}
+	idu64 := uint(u64)
+
+	// Call the service layer
+	err = u.usrsvc.update(r.Context(), idu64, input)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		oplog.Error().Err(err).Msg("Failed to update user")
+		return
+	}
+
+	// Return the response
 	w.WriteHeader(http.StatusOK)
 }

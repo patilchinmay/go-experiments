@@ -65,3 +65,23 @@ func (ur *UserRepository) Delete(ctx context.Context, id uint) error {
 
 	return nil
 }
+
+func (ur *UserRepository) Update(ctx context.Context, id uint, input User) error {
+	var user User
+	result := ur.db.First(&user, id)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	// Updates supports updating with struct or map[string]interface{}, when updating with struct it will only update non-zero fields by default
+	// https://gorm.io/docs/update.html#Updates-multiple-columns
+	// Only fields passed in the input will be updated. Rest will be left untouched.
+	result = ur.db.Model(&user).Updates(input)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
