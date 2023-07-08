@@ -2,6 +2,7 @@ package user_test
 
 import (
 	"context"
+	"fmt"
 	"math/rand"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -25,7 +26,7 @@ var _ = Describe("UserRepository with SQLite", func() {
 		Expect(err).ShouldNot(HaveOccurred())
 
 		automigrateUser := true
-		usrrepo = user.NewUserRepository(gdb, automigrateUser)
+		usrrepo = user.NewUserRepository(gdb.Debug(), automigrateUser)
 	})
 
 	AfterEach(func() {
@@ -104,4 +105,98 @@ var _ = Describe("UserRepository with SQLite", func() {
 		})
 	})
 
+	Context("Update User", func() {
+		It("should update a single field, and leave others untouched", func() {
+
+			usr := &user.User{
+				ID:        uint(rand.Uint32()),
+				FirstName: "test_firstname",
+				LastName:  "test_lastname",
+				Age:       30,
+				Email:     "test@test.com",
+			}
+
+			toBeUpdated := &user.User{
+				LastName: "updated_lastname",
+			}
+
+			// Add User
+			dbUserID, err := usrrepo.Add(context.Background(), *usr)
+
+			// Verify that the user is created
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(dbUserID).Should(Equal(usr.ID))
+
+			// Update the user
+			err = usrrepo.Update(context.Background(), usr.ID, *toBeUpdated)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			// Get the updated user
+			updatedUser, err := usrrepo.Get(context.Background(), usr.ID)
+
+			fmt.Printf("CreatedAt: %v\n", updatedUser.CreatedAt)
+			fmt.Printf("UpdatedAt: %v\n", updatedUser.UpdatedAt)
+
+			// Verify that fields except lastname have NOT changed
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(updatedUser.ID).Should(Equal(usr.ID))
+			Expect(updatedUser.FirstName).Should(Equal(usr.FirstName))
+			Expect(updatedUser.Age).Should(Equal(usr.Age))
+			Expect(updatedUser.Email).Should(Equal(usr.Email))
+
+			// Verify that the lastname has changed
+			Expect(updatedUser.LastName).Should(Equal(toBeUpdated.LastName))
+
+			// Verify that the updated_at has changed
+			Expect(updatedUser.UpdatedAt).ShouldNot(Equal(updatedUser.CreatedAt))
+		})
+
+		It("should update all fields", func() {
+
+			usr := &user.User{
+				ID:        uint(rand.Uint32()),
+				FirstName: "test_firstname",
+				LastName:  "test_lastname",
+				Age:       30,
+				Email:     "test@test.com",
+			}
+
+			toBeUpdated := &user.User{
+				FirstName: "fn",
+				LastName:  "ln",
+				Age:       25,
+				Email:     "fnln@test.com",
+			}
+
+			// Add User
+			dbUserID, err := usrrepo.Add(context.Background(), *usr)
+
+			// Verify that the user is created
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(dbUserID).Should(Equal(usr.ID))
+
+			// Update the user
+			err = usrrepo.Update(context.Background(), usr.ID, *toBeUpdated)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			// Get the updated user
+			updatedUser, err := usrrepo.Get(context.Background(), usr.ID)
+
+			fmt.Printf("CreatedAt: %v\n", updatedUser.CreatedAt)
+			fmt.Printf("UpdatedAt: %v\n", updatedUser.UpdatedAt)
+
+			// Verify that ID is NOT changed
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(updatedUser.ID).Should(Equal(usr.ID))
+
+			// Verify that other fields have changed
+			Expect(updatedUser.FirstName).Should(Equal(toBeUpdated.FirstName))
+			Expect(updatedUser.Age).Should(Equal(toBeUpdated.Age))
+			Expect(updatedUser.Email).Should(Equal(toBeUpdated.Email))
+			Expect(updatedUser.LastName).Should(Equal(toBeUpdated.LastName))
+
+			// Verify that the updated_at has changed
+			Expect(updatedUser.UpdatedAt).ShouldNot(Equal(updatedUser.CreatedAt))
+		})
+	})
 })
