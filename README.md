@@ -69,7 +69,7 @@ Each repository has a README.md with description, relevant details to setup and 
    **Database:**
 
    - [x] Service + Repository Layer (in [user](go-chi-server/app/user) module)
-   - [x] Example in [user](go-chi-server/app/user) module with a REST API
+   - [x] Example in [user](go-chi-server/app/user) module with a CRUD REST API
    - [x] Database ORM ([gorm](https://github.com/go-gorm/gorm))
    - [x] DB Connection with Connection pool
    - [x] Testing with [go-sqlmock](go-chi-server/app/user/repository_test.go)
