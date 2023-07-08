@@ -14,7 +14,7 @@ import (
 )
 
 var _ = Describe("UserRepository with SQLite", func() {
-	var usrrepo *user.UserRepository
+	var usrrepo user.UserRepository
 	var gdb *gorm.DB
 	var err error
 

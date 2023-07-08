@@ -6,15 +6,23 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserRepository struct {
+// go generate mockgen -destination=mocks/repository_mock.go -package mocks . UserRepository
+type UserRepository interface {
+	Get(ctx context.Context, id uint) (User, error)
+	Add(ctx context.Context, user User) (uint, error)
+	Delete(ctx context.Context, id uint) error
+	Update(ctx context.Context, id uint, input User) error
+}
+
+type UserRepo struct {
 	db *gorm.DB
 }
 
-var usrrepo *UserRepository
+var usrrepo *UserRepo
 
-func NewUserRepository(db *gorm.DB, automigrate bool) *UserRepository {
+func NewUserRepository(db *gorm.DB, automigrate bool) *UserRepo {
 	if usrrepo == nil {
-		usrrepo = &UserRepository{
+		usrrepo = &UserRepo{
 			db: db,
 		}
 
@@ -26,14 +34,14 @@ func NewUserRepository(db *gorm.DB, automigrate bool) *UserRepository {
 	return usrrepo
 }
 
-// DiscardUserRepository will remove the reference to usrrepo so that it can be garbage collected. In other words, it deletes the singleton instance of *UserRepository.
+// DiscardUserRepository will remove the reference to usrrepo so that it can be garbage collected. In other words, it deletes the singleton instance of *UserRepo.
 func DiscardUserRepository() {
 	if usrrepo != nil {
 		usrrepo = nil
 	}
 }
 
-func (ur *UserRepository) Get(ctx context.Context, id uint) (User, error) {
+func (ur *UserRepo) Get(ctx context.Context, id uint) (User, error) {
 	var user User
 
 	result := ur.db.First(&user, id)
@@ -46,7 +54,7 @@ func (ur *UserRepository) Get(ctx context.Context, id uint) (User, error) {
 	return user, nil
 }
 
-func (ur *UserRepository) Add(ctx context.Context, user User) (uint, error) {
+func (ur *UserRepo) Add(ctx context.Context, user User) (uint, error) {
 	result := ur.db.Create(&user)
 
 	if result.Error != nil {
@@ -56,7 +64,7 @@ func (ur *UserRepository) Add(ctx context.Context, user User) (uint, error) {
 	return user.ID, nil
 }
 
-func (ur *UserRepository) Delete(ctx context.Context, id uint) error {
+func (ur *UserRepo) Delete(ctx context.Context, id uint) error {
 	result := ur.db.Delete(&User{}, id) // this is soft delete
 
 	if result.Error != nil {
@@ -66,7 +74,7 @@ func (ur *UserRepository) Delete(ctx context.Context, id uint) error {
 	return nil
 }
 
-func (ur *UserRepository) Update(ctx context.Context, id uint, input User) error {
+func (ur *UserRepo) Update(ctx context.Context, id uint, input User) error {
 	var user User
 	result := ur.db.First(&user, id)
 

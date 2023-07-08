@@ -15,7 +15,7 @@ import (
 )
 
 var _ = Describe("UserRepository with go-sqlmock", func() {
-	var usrrepo *user.UserRepository
+	var usrrepo user.UserRepository
 	var mock sqlmock.Sqlmock
 
 	BeforeEach(func() {
