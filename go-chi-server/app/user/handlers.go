@@ -48,7 +48,7 @@ func (u *UserHandler) Get(w http.ResponseWriter, r *http.Request) {
 	idu64 := uint(u64)
 
 	// Call the service layer and retrieve the user
-	user, err := u.usrsvc.get(r.Context(), idu64)
+	user, err := u.usrsvc.Get(r.Context(), idu64)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		oplog.Error().Err(err).Msg("Failed to get user")
@@ -84,7 +84,7 @@ func (u *UserHandler) Add(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// Call the service layer
-	resp, err := u.usrsvc.add(r.Context(), user)
+	resp, err := u.usrsvc.Add(r.Context(), user)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		oplog.Error().Err(err).Msg("Body failed validation")
@@ -119,7 +119,7 @@ func (u *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	idu64 := uint(u64)
 
 	// Call the service layer and retrieve the user
-	err = u.usrsvc.delete(r.Context(), idu64)
+	err = u.usrsvc.Delete(r.Context(), idu64)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		oplog.Error().Err(err).Msg("Failed to delete user")
@@ -165,7 +165,7 @@ func (u *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	idu64 := uint(u64)
 
 	// Call the service layer
-	err = u.usrsvc.update(r.Context(), idu64, input)
+	err = u.usrsvc.Update(r.Context(), idu64, input)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		oplog.Error().Err(err).Msg("Failed to update user")

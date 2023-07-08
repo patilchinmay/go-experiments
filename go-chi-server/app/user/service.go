@@ -10,12 +10,12 @@ import (
 )
 
 type UserService struct {
-	usrrepo *UserRepository
+	usrrepo UserRepository
 }
 
 var usrsvc *UserService
 
-func NewUserService(usrrepo *UserRepository) *UserService {
+func NewUserService(usrrepo UserRepository) *UserService {
 	if usrsvc == nil {
 		usrsvc = &UserService{
 			usrrepo: usrrepo,
@@ -24,7 +24,14 @@ func NewUserService(usrrepo *UserRepository) *UserService {
 	return usrsvc
 }
 
-func (u *UserService) get(ctx context.Context, id uint) (User, error) {
+// DiscardUserService will remove the reference to usrsvc so that it can be garbage collected. In other words, it deletes the singleton instance of *UserService.
+func DiscardUserService() {
+	if usrsvc != nil {
+		usrsvc = nil
+	}
+}
+
+func (u *UserService) Get(ctx context.Context, id uint) (User, error) {
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Get")
 
@@ -37,7 +44,7 @@ func (u *UserService) get(ctx context.Context, id uint) (User, error) {
 	return user, nil
 }
 
-func (u *UserService) add(ctx context.Context, user User) (uint, error) {
+func (u *UserService) Add(ctx context.Context, user User) (uint, error) {
 	//  Setup logger
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Add")
@@ -73,7 +80,7 @@ func (u *UserService) add(ctx context.Context, user User) (uint, error) {
 	return id, nil
 }
 
-func (u *UserService) delete(ctx context.Context, id uint) error {
+func (u *UserService) Delete(ctx context.Context, id uint) error {
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Delete")
 
@@ -86,7 +93,7 @@ func (u *UserService) delete(ctx context.Context, id uint) error {
 	return nil
 }
 
-func (u *UserService) update(ctx context.Context, id uint, input UpdateUserInput) error {
+func (u *UserService) Update(ctx context.Context, id uint, input UpdateUserInput) error {
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Update")
 
