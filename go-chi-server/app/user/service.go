@@ -76,7 +76,6 @@ func (u *UserService) Add(ctx context.Context, user User) (uint, error) {
 	}
 
 	// return the response
-	// resp := `{"User":"Add"}`
 	return id, nil
 }
 
