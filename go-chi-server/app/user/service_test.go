@@ -2,6 +2,7 @@ package user_test
 
 import (
 	"context"
+	"errors"
 	"math/rand"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -47,7 +48,9 @@ var _ = Describe("User Service", func() {
 			// Define mock expe
 			usrrepomock.
 				EXPECT().
-				Add(context.Background(), usr).Return(usr.ID, nil)
+				Add(context.Background(), usr).
+				Return(usr.ID, nil).
+				Times(1)
 
 			expectedUserID, err := usrsvc.Add(context.Background(), usr)
 
@@ -68,6 +71,40 @@ var _ = Describe("User Service", func() {
 
 			Expect(err).Should(HaveOccurred())
 			Expect(expectedUserID).Should(Equal(uint(0)))
+		})
+	})
+
+	Context("Delete User", func() {
+		It("should delete a single user without error", func() {
+			userID := uint(rand.Uint32())
+
+			// Define mock expectation
+			usrrepomock.
+				EXPECT().
+				Delete(context.Background(), userID).
+				Return(nil).
+				Times(1)
+
+			err := usrsvc.Delete(context.Background(), userID)
+
+			Expect(err).ShouldNot(HaveOccurred())
+		})
+
+		It("should return an error if failed to delete", func() {
+			userID := uint(rand.Uint32())
+
+			// Define mock expectation
+			dummyError := errors.New("dummy error")
+			usrrepomock.
+				EXPECT().
+				Delete(context.Background(), userID).
+				Return(dummyError).
+				Times(1)
+
+			err := usrsvc.Delete(context.Background(), userID)
+
+			Expect(err).Should(HaveOccurred())
+			Expect(err.Error()).Should(ContainSubstring("dummy error"))
 		})
 	})
 
