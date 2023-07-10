@@ -108,4 +108,123 @@ var _ = Describe("User Service", func() {
 		})
 	})
 
+	Context("Get User", func() {
+		It("should get a single user without error", func() {
+			usr := user.User{
+				ID:        uint(rand.Uint32()),
+				FirstName: "test_firstname",
+				LastName:  "test_lastname",
+				Age:       25,
+				Email:     "test@test.com",
+			}
+			// Define mock expectation
+			usrrepomock.
+				EXPECT().Get(context.Background(), usr.ID).
+				Return(usr, nil).
+				Times(1)
+
+			getUserResult, err := usrsvc.Get(context.Background(), usr.ID)
+
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(getUserResult).To(Equal(usr))
+		})
+
+		It("should return an error if failed to get user", func() {
+			userID := uint(rand.Uint32())
+
+			// Define mock expectation
+			dummyError := errors.New("dummy error")
+			var usr user.User
+
+			usrrepomock.
+				EXPECT().
+				Get(context.Background(), userID).
+				Return(usr, dummyError).
+				Times(1)
+
+			getUserResult, err := usrsvc.Get(context.Background(), userID)
+
+			Expect(err).Should(HaveOccurred())
+			Expect(err.Error()).Should(ContainSubstring("dummy error"))
+			Expect(getUserResult).To(Equal(usr))
+		})
+	})
+
+	Context("Update User", func() {
+		It("should update a single user without error", func() {
+			userID := uint(rand.Uint32())
+
+			input := user.UpdateUserInput{
+				FirstName: "updatedfn",
+				LastName:  "updatedln",
+				Age:       25,
+				Email:     "update@test.com",
+			}
+
+			usr := user.User{
+				FirstName: input.FirstName,
+				LastName:  input.LastName,
+				Age:       input.Age,
+				Email:     input.Email,
+			}
+
+			// Define mock expectation
+			usrrepomock.
+				EXPECT().Update(context.Background(), userID, usr).
+				Return(nil).
+				Times(1)
+
+			err := usrsvc.Update(context.Background(), userID, input)
+
+			Expect(err).ShouldNot(HaveOccurred())
+		})
+
+		It("should return an error when failed to update a single user due to validation", func() {
+			userID := uint(rand.Uint32())
+
+			input := user.UpdateUserInput{
+				FirstName: "updatedfn",
+				LastName:  "updatedln",
+				Age:       250, // invalid input
+				Email:     "update@test.com",
+			}
+
+			err := usrsvc.Update(context.Background(), userID, input)
+
+			Expect(err).Should(HaveOccurred())
+			Expect(err.Error()).Should(ContainSubstring("validation for 'Age' failed"))
+		})
+
+		It("should return an error when failed to update a single user due to repo error", func() {
+			userID := uint(rand.Uint32())
+
+			input := user.UpdateUserInput{
+				FirstName: "updatedfn",
+				LastName:  "updatedln",
+				Age:       25,
+				Email:     "update@test.com",
+			}
+
+			usr := user.User{
+				FirstName: input.FirstName,
+				LastName:  input.LastName,
+				Age:       input.Age,
+				Email:     input.Email,
+			}
+
+			// Define mock expectation
+			dummyError := errors.New("dummy error")
+
+			// Define mock expectation
+			usrrepomock.
+				EXPECT().Update(context.Background(), userID, usr).
+				Return(dummyError).
+				Times(1)
+
+			err := usrsvc.Update(context.Background(), userID, input)
+
+			Expect(err).Should(HaveOccurred())
+			Expect(err.Error()).Should(ContainSubstring("dummy error"))
+		})
+	})
 })
