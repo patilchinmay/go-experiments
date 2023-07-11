@@ -11,7 +11,9 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/onsi/ginkgo/v2 v2.9.2
 	github.com/onsi/gomega v1.27.6
+	github.com/phayes/freeport v0.0.0-20220201140144-74d24b5ae9f5
 	github.com/rs/zerolog v1.29.1
+	go.uber.org/mock v0.2.0
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/driver/sqlite v1.5.2
 	gorm.io/gorm v1.25.2-0.20230530020048-26663ab9bf55
@@ -29,7 +31,6 @@ require (
 	github.com/leodido/go-urn v1.2.3 // indirect
 	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
-	go.uber.org/mock v0.2.0 // indirect
 	golang.org/x/crypto v0.8.0 // indirect
 )
 
