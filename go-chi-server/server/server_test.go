@@ -2,18 +2,21 @@ package server_test
 
 import (
 	"net"
+	"strconv"
 	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/patilchinmay/go-experiments/go-chi-server/server"
+	"github.com/phayes/freeport"
 	"github.com/rs/zerolog"
 )
 
-var _ = Describe("Server", func() {
+var _ = Describe("Server", Serial, func() {
 	var ts = &server.Server{}
 	host := "127.0.0.1"
-	port := "10123"
+	var portInt, _ = freeport.GetFreePort()
+	var port = strconv.Itoa(portInt)
 
 	BeforeEach(func() {
 		// Create server
