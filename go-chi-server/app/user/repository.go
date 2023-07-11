@@ -66,6 +66,7 @@ func (ur *UserRepo) Add(ctx context.Context, user User) (uint, error) {
 
 func (ur *UserRepo) Delete(ctx context.Context, id uint) error {
 	result := ur.db.Delete(&User{}, id) // this is soft delete
+	// result := ur.db.Unscoped().Delete(&User{}, id) // this is hard delete
 
 	if result.Error != nil {
 		return result.Error
