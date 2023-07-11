@@ -72,15 +72,17 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] Example in [user](go-chi-server/app/user) module with a CRUD REST API
    - [x] Database ORM ([gorm](https://github.com/go-gorm/gorm))
    - [x] DB Connection with Connection pool
-   - [x] Testing with [go-sqlmock](go-chi-server/app/user/repository_test.go)
-   - [x] Testing with [SQLite](go-chi-server/app/user/repository_sqllite_test.go)
    - [ ] Migrations ([golang-migrate](https://github.com/golang-migrate/migrate))
    - [ ] Database disconnection/disruption
    - [ ] Atomic Transactions
 
    **Tests, Benchmark and Docs:**
 
-   - [x] Tests, coverage and how to run them (`ginkgo, gomega`).
+   - [x] Tests, coverage (`ginkgo, gomega`) and how to run them in [Makefile](go-chi-server/Makefile).
+   - [x] SQL mock testing with [go-sqlmock](go-chi-server/app/user/repository_test.go)
+   - [x] Testing with [SQLite](go-chi-server/app/user/repository_sqllite_test.go)
+   - [x] Mock generation and testing using [gomock/mockgen](go-chi-server/app/user/service_test.go)
+   - [x] HTTP handlers testing with [httptest](go-chi-server/app/user/handlers_test.go)
    - [x] Explanatory comments and `godoc`.
    - [x] **Code Coverage**
      - Run tests: `make test`
