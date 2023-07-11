@@ -30,8 +30,9 @@ var _ = Describe("UserRepository with SQLite", func() {
 	})
 
 	AfterEach(func() {
-		user.DiscardUserRepository()
 		Expect(err).ShouldNot(HaveOccurred())
+		user.DiscardUserRepository()
+		gdb = nil
 	})
 
 	Context("Get User", func() {

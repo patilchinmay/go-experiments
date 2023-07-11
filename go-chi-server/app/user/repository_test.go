@@ -17,6 +17,7 @@ import (
 var _ = Describe("UserRepository with go-sqlmock", func() {
 	var usrrepo user.UserRepository
 	var mock sqlmock.Sqlmock
+	var gdb *gorm.DB
 
 	BeforeEach(func() {
 		var db *sql.DB
@@ -25,7 +26,7 @@ var _ = Describe("UserRepository with go-sqlmock", func() {
 		db, mock, err = sqlmock.New() // mock sql.DB
 		Expect(err).ShouldNot(HaveOccurred())
 
-		gdb, err := gorm.Open(postgres.New(
+		gdb, err = gorm.Open(postgres.New(
 			postgres.Config{
 				Conn:       db,
 				DriverName: "postgres",
@@ -38,9 +39,10 @@ var _ = Describe("UserRepository with go-sqlmock", func() {
 	})
 
 	AfterEach(func() {
-		user.DiscardUserRepository()
 		err := mock.ExpectationsWereMet() // make sure all expectations were met
 		Expect(err).ShouldNot(HaveOccurred())
+		user.DiscardUserRepository()
+		gdb = nil
 	})
 
 	Context("Get User", func() {
