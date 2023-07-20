@@ -35,10 +35,26 @@ func (u *UserService) Get(ctx context.Context, id uint) (User, error) {
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Get")
 
-	// Call the repository layer
-	user, err := u.usrrepo.Get(ctx, id)
+	var (
+		user User
+		err  error
+	)
+
+	// Retry-able function
+	userRepoGet := func() error {
+		// Call the repository layer
+		user, err = u.usrrepo.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	err = userRepoGet()
+
 	if err != nil {
-		return User{}, err
+		return user, err
 	}
 
 	return user, nil
