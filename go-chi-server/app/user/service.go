@@ -2,9 +2,11 @@ package user
 
 import (
 	"context"
+	"time"
 
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-playground/validator/v10"
+	cnp "github.com/patilchinmay/go-experiments/cloudnativepatterns"
 	"github.com/patilchinmay/go-experiments/go-chi-server/utils/logger"
 	v "github.com/patilchinmay/go-experiments/go-chi-server/utils/validator"
 )
@@ -31,6 +33,9 @@ func DiscardUserService() {
 	}
 }
 
+const maxRetries = 3
+const retryInterval = 2 * time.Second
+
 func (u *UserService) Get(ctx context.Context, id uint) (User, error) {
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Get")
@@ -41,7 +46,7 @@ func (u *UserService) Get(ctx context.Context, id uint) (User, error) {
 	)
 
 	// Retry-able function
-	userRepoGet := func() error {
+	var userRepoGet cnp.CloudNativeFunction = func(ctx context.Context) error {
 		// Call the repository layer
 		user, err = u.usrrepo.Get(ctx, id)
 		if err != nil {
@@ -51,7 +56,9 @@ func (u *UserService) Get(ctx context.Context, id uint) (User, error) {
 		return nil
 	}
 
-	err = userRepoGet()
+	r := cnp.Retry(userRepoGet, maxRetries, retryInterval)
+
+	err = r(ctx)
 
 	if err != nil {
 		return user, err
@@ -85,8 +92,23 @@ func (u *UserService) Add(ctx context.Context, user User) (uint, error) {
 		return 0, err
 	}
 
-	// Call the repository layer
-	id, err := u.usrrepo.Add(ctx, user)
+	var id uint
+
+	// Retry-able function
+	var userRepoAdd cnp.CloudNativeFunction = func(ctx context.Context) error {
+		// Call the repository layer
+		id, err = u.usrrepo.Add(ctx, user)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	r := cnp.Retry(userRepoAdd, maxRetries, retryInterval)
+
+	err = r(ctx)
+
 	if err != nil {
 		return 0, err
 	}
@@ -99,8 +121,23 @@ func (u *UserService) Delete(ctx context.Context, id uint) error {
 	logger := logger.Logger.With().Str("requestID", middleware.GetReqID(ctx)).Logger()
 	logger.Debug().Msg("User Service : Delete")
 
-	// Call the repository layer
-	err := u.usrrepo.Delete(ctx, id)
+	var err error
+
+	// Retry-able function
+	var userRepoDelete cnp.CloudNativeFunction = func(ctx context.Context) error {
+		// Call the repository layer
+		err = u.usrrepo.Delete(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	r := cnp.Retry(userRepoDelete, maxRetries, retryInterval)
+
+	err = r(ctx)
+
 	if err != nil {
 		return err
 	}
@@ -139,8 +176,21 @@ func (u *UserService) Update(ctx context.Context, id uint, input UpdateUserInput
 		Email:     input.Email,
 	}
 
-	// Call the repository layer
-	err = u.usrrepo.Update(ctx, id, user)
+	// Retry-able function
+	var userRepoUpdate cnp.CloudNativeFunction = func(ctx context.Context) error {
+		// Call the repository layer
+		err = u.usrrepo.Update(ctx, id, user)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	r := cnp.Retry(userRepoUpdate, maxRetries, retryInterval)
+
+	err = r(ctx)
+
 	if err != nil {
 		return err
 	}
