@@ -31,6 +31,11 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] **`Singleton`**: Creation of App and Server.
    - [x] **`Builder`**: App and Server setup with different methods such as `WithLogger, WithHost, WithPort etc.`.
 
+   **Cloud Native Patterns:**
+
+   - [x] **`Retry`**: Defined in [cloudnativepatterns](./cloudnativepatterns/) and used in [UserService](./go-chi-server/app/user/service.go).
+   - [ ] **`Circuit Breaker`**:
+
    **Traceability:**
 
    - [x] HTTP Request Logging (`httplog`).
@@ -116,7 +121,6 @@ Each repository has a README.md with description, relevant details to setup and 
 - [ ] Context parameter
 - [ ] JSON handling
 - [ ] Route Versioning
-- [ ] Cloud Native Golang Constructs e.g. retry, switch-breaker etc.
 - [ ] Code Quality / Static Analysis (e.g. Sonarqube, Codeclimate etc.)
 - [ ] Sentry
 - [ ] Feature Toggling
