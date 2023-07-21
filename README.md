@@ -107,6 +107,7 @@ Each repository has a README.md with description, relevant details to setup and 
 
    - [x] Graceful Shutdown / OS Interrupt signal handling in `main.go`.
    - [x] Idle, Read and write timeout in http.Server
+   - [x] Validation of structs in [UserService](./go-chi-server/app/user/service.go) using [validator](https://github.com/go-playground/validator)
 
 3. [https-serving](./https-serving)
    - [x]  Base [go-chi-server](./go-chi-server/)
