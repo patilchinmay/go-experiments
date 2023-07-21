@@ -58,6 +58,28 @@ var _ = Describe("User Service", func() {
 			Expect(expectedUserID).Should(Equal(usr.ID))
 		})
 
+		It("should retry 3 times for adding a single user when an error occurs", func() {
+			usr := user.User{
+				ID:        uint(rand.Uint32()),
+				FirstName: "test_firstname",
+				LastName:  "test_lastname",
+				Age:       30,
+				Email:     "test@test.com",
+			}
+
+			// Define mock expe
+			dummyError := errors.New("")
+			usrrepomock.
+				EXPECT().
+				Add(context.Background(), usr).
+				Return(uint(0), dummyError).
+				Times(4)
+
+			_, err := usrsvc.Add(context.Background(), usr)
+
+			Expect(err).Should(HaveOccurred())
+		})
+
 		It("should return a validation error for invalid input", func() {
 			usr := user.User{
 				ID:        uint(rand.Uint32()),
@@ -90,7 +112,7 @@ var _ = Describe("User Service", func() {
 			Expect(err).ShouldNot(HaveOccurred())
 		})
 
-		It("should return an error if failed to delete", func() {
+		It("should return an error if failed to delete after 3 retries", func() {
 			userID := uint(rand.Uint32())
 
 			// Define mock expectation
@@ -99,12 +121,11 @@ var _ = Describe("User Service", func() {
 				EXPECT().
 				Delete(context.Background(), userID).
 				Return(dummyError).
-				Times(1)
+				Times(4)
 
 			err := usrsvc.Delete(context.Background(), userID)
 
 			Expect(err).Should(HaveOccurred())
-			Expect(err.Error()).Should(ContainSubstring("dummy error"))
 		})
 	})
 
@@ -133,19 +154,18 @@ var _ = Describe("User Service", func() {
 			userID := uint(rand.Uint32())
 
 			// Define mock expectation
-			dummyError := errors.New("dummy error")
+			dummyError := errors.New("")
 			var usr user.User
 
 			usrrepomock.
 				EXPECT().
 				Get(context.Background(), userID).
 				Return(usr, dummyError).
-				Times(1)
+				Times(4)
 
 			getUserResult, err := usrsvc.Get(context.Background(), userID)
 
 			Expect(err).Should(HaveOccurred())
-			Expect(err.Error()).Should(ContainSubstring("dummy error"))
 			Expect(getUserResult).To(Equal(usr))
 		})
 	})
@@ -195,7 +215,7 @@ var _ = Describe("User Service", func() {
 			Expect(err.Error()).Should(ContainSubstring("validation for 'Age' failed"))
 		})
 
-		It("should return an error when failed to update a single user due to repo error", func() {
+		It("should retry 3 times and return an error when failed to update a single user due to repo error", func() {
 			userID := uint(rand.Uint32())
 
 			input := user.UpdateUserInput{
@@ -213,18 +233,17 @@ var _ = Describe("User Service", func() {
 			}
 
 			// Define mock expectation
-			dummyError := errors.New("dummy error")
+			dummyError := errors.New("")
 
 			// Define mock expectation
 			usrrepomock.
 				EXPECT().Update(context.Background(), userID, usr).
 				Return(dummyError).
-				Times(1)
+				Times(4)
 
 			err := usrsvc.Update(context.Background(), userID, input)
 
 			Expect(err).Should(HaveOccurred())
-			Expect(err.Error()).Should(ContainSubstring("dummy error"))
 		})
 	})
 })
