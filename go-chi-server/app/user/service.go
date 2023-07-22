@@ -13,14 +13,16 @@ import (
 
 type UserService struct {
 	usrrepo UserRepository
+	cnp     cnp.CloudNativePatterns
 }
 
 var usrsvc *UserService
 
-func NewUserService(usrrepo UserRepository) *UserService {
+func NewUserService(usrrepo UserRepository, cnp cnp.CloudNativePatterns) *UserService {
 	if usrsvc == nil {
 		usrsvc = &UserService{
 			usrrepo: usrrepo,
+			cnp:     cnp,
 		}
 	}
 	return usrsvc
@@ -56,7 +58,7 @@ func (u *UserService) Get(ctx context.Context, id uint) (User, error) {
 		return nil
 	}
 
-	r := cnp.Retry(userRepoGet, maxRetries, retryInterval)
+	r := u.cnp.Retry(userRepoGet, maxRetries, retryInterval)
 
 	err = r(ctx)
 
@@ -105,7 +107,7 @@ func (u *UserService) Add(ctx context.Context, user User) (uint, error) {
 		return nil
 	}
 
-	r := cnp.Retry(userRepoAdd, maxRetries, retryInterval)
+	r := u.cnp.Retry(userRepoAdd, maxRetries, retryInterval)
 
 	err = r(ctx)
 
@@ -134,7 +136,7 @@ func (u *UserService) Delete(ctx context.Context, id uint) error {
 		return nil
 	}
 
-	r := cnp.Retry(userRepoDelete, maxRetries, retryInterval)
+	r := u.cnp.Retry(userRepoDelete, maxRetries, retryInterval)
 
 	err = r(ctx)
 
@@ -187,7 +189,7 @@ func (u *UserService) Update(ctx context.Context, id uint, input UpdateUserInput
 		return nil
 	}
 
-	r := cnp.Retry(userRepoUpdate, maxRetries, retryInterval)
+	r := u.cnp.Retry(userRepoUpdate, maxRetries, retryInterval)
 
 	err = r(ctx)
 

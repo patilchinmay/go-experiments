@@ -1,6 +1,8 @@
 package user
 
 import (
+	"github.com/benbjohnson/clock"
+	cnp "github.com/patilchinmay/go-experiments/cloudnativepatterns"
 	"github.com/patilchinmay/go-experiments/go-chi-server/app"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
@@ -19,8 +21,12 @@ func SetupSubrouter(db *gorm.DB, logger zerolog.Logger) {
 	automigrateUser := true
 	usrrepo := NewUserRepository(db, automigrateUser)
 
+	// Initiate CNP which is required by the UserService
+	clock := clock.New()
+	cnp := cnp.NewCloudNativePatterns(clock)
+
 	// Initiate User Service
-	usrsvc := NewUserService(usrrepo)
+	usrsvc := NewUserService(usrrepo, cnp)
 
 	// Initiate User handler
 	usrhandler := NewUserHandler(usrsvc)
