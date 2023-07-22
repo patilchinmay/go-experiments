@@ -3,11 +3,10 @@ package cloudnativepatterns
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 )
 
-func Retry(cnf CloudNativeFunction, retries int, delay time.Duration) CloudNativeFunction {
+func (cnp *CNP) Retry(cnf CloudNativeFunction, retries int, delay time.Duration) CloudNativeFunction {
 	return func(ctx context.Context) error {
 		for r := 0; ; r++ {
 			err := cnf(ctx)
@@ -20,10 +19,10 @@ func Retry(cnf CloudNativeFunction, retries int, delay time.Duration) CloudNativ
 				return fmt.Errorf("exceeded maximum number of retries: %d", retries)
 			}
 
-			log.Printf("Attempt %d failed; retrying in %v", r+1, delay)
+			fmt.Printf("Attempt %d failed at %v; retrying in %v\n", r+1, cnp.Clock.Now(), delay)
 
 			select {
-			case <-time.After(delay):
+			case <-cnp.Clock.After(delay):
 			case <-ctx.Done():
 				return ctx.Err()
 			}
