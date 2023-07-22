@@ -88,7 +88,7 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x] Testing with [SQLite](go-chi-server/app/user/repository_sqllite_test.go)
    - [x] Mock generation and testing using [gomock/mockgen](go-chi-server/app/user/service_test.go)
    - [x] HTTP handlers testing with [httptest](go-chi-server/app/user/handlers_test.go)
-   - [x] Speed up testing using [mock clock](https://github.com/benbjohnson/clock) for retries in [UserService](./go-chi-server/app/user/service.go) so we don't actually wait for retry time intervals.
+   - [x] Speed up testing using [mock clock](https://github.com/benbjohnson/clock) for retries in [UserService](./go-chi-server/app/user/service_test.go) so we don't actually wait for retry time intervals.
    - [x] Explanatory comments and `godoc`.
    - [x] **Code Coverage**
      - Run tests: `make test`
