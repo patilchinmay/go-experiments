@@ -1,12 +1,22 @@
+/*
+The important concepts to note in this file:
+
+- Mocking interfaces using go-mock
+- Mocking time using a fake clock
+*/
+
 package user_test
 
 import (
 	"context"
 	"errors"
 	"math/rand"
+	"time"
 
+	"github.com/benbjohnson/clock"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	cnp "github.com/patilchinmay/go-experiments/cloudnativepatterns"
 	"github.com/patilchinmay/go-experiments/go-chi-server/app/user"
 	"github.com/patilchinmay/go-experiments/go-chi-server/app/user/mocks"
 	"go.uber.org/mock/gomock"
@@ -17,6 +27,8 @@ var _ = Describe("User Service", func() {
 		ctrl        *gomock.Controller
 		usrrepomock *mocks.MockUserRepository
 		usrsvc      *user.UserService
+		doneCh      chan struct{}
+		mockclock   *clock.Mock
 	)
 
 	BeforeEach(func() {
@@ -26,13 +38,36 @@ var _ = Describe("User Service", func() {
 		// Create mock UserRepo
 		usrrepomock = mocks.NewMockUserRepository(ctrl)
 
+		doneCh = make(chan struct{})
+
+		// For mock time
+		mockclock = clock.NewMock()
+
+		// Instantiate CNP
+		CNP := cnp.NewCloudNativePatterns(mockclock)
+
+		// Run a separate goroutine to increase the time
+		go func(doneCh chan struct{}, mockclock *clock.Mock) {
+			for {
+				select {
+				case <-doneCh:
+					return
+				default:
+					mockclock.Add(1 * time.Second)
+				}
+			}
+		}(doneCh, mockclock)
+
 		// Instantiate UserService
-		usrsvc = user.NewUserService(usrrepomock)
+		usrsvc = user.NewUserService(usrrepomock, CNP)
 	})
 
 	AfterEach(func() {
 		ctrl.Finish()
 		user.DiscardUserService()
+		cnp.DiscardCloudNativePatterns()
+		close(doneCh)
+		Eventually(doneCh).Should(BeClosed())
 	})
 
 	Context("Add User", func() {
