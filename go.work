@@ -5,4 +5,5 @@ use (
 	./go-chi-server
 	./hello
 	./https-serving
+	./timetest
 )
