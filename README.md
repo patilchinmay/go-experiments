@@ -115,6 +115,13 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x]  HTTPS serving
    - [x]  Automatic certificate [reloading](https://opensource.com/article/22/9/dynamically-update-tls-certificates-golang-server-no-downtime) on certificate changes (e.g. renewal)
 
+4. [benchmarking](./benchmarking)
+   - []  TBD
+
+5. [profiling](./profiling/)
+   - []  TBD
+
+
 # Possible Improvements
 
 - [ ] Config loading
