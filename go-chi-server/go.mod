@@ -4,7 +4,8 @@ go 1.20
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
-	github.com/go-chi/chi/v5 v5.0.7
+	github.com/benbjohnson/clock v1.3.5
+	github.com/go-chi/chi/v5 v5.0.11
 	github.com/go-chi/cors v1.2.1
 	github.com/go-chi/httplog v0.3.0
 	github.com/go-playground/validator/v10 v10.13.0
@@ -31,7 +32,9 @@ require (
 	github.com/leodido/go-urn v1.2.3 // indirect
 	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
-	golang.org/x/crypto v0.8.0 // indirect
+	github.com/stretchr/testify v1.8.3 // indirect
+	golang.org/x/crypto v0.18.0 // indirect
+	google.golang.org/protobuf v1.31.0 // indirect
 )
 
 require (
@@ -42,9 +45,9 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/sethvargo/go-envconfig v0.9.0
-	golang.org/x/net v0.9.0 // indirect
-	golang.org/x/sys v0.7.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
-	golang.org/x/tools v0.7.0 // indirect
+	golang.org/x/net v0.20.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/tools v0.17.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
