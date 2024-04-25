@@ -1,0 +1,7 @@
+services:
+  valkey:
+    platform: linux/amd64
+    container_name: local-valkey
+    image: valkey/valkey:7.2.5
+    ports:
+      - "6379:6379"

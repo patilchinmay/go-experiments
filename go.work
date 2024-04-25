@@ -1,4 +1,4 @@
-go 1.21.0
+go 1.22.1
 
 use (
 	./cloudnativepatterns
@@ -6,5 +6,6 @@ use (
 	./go-chi-server
 	./hello
 	./https-serving
+	./testcontainersdemo
 	./timetest
 )
