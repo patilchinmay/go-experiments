@@ -8,5 +8,6 @@ use (
 	./hello
 	./https-serving
 	./testcontainersdemo
+	./tickertest
 	./timetest
 )
