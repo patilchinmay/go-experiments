@@ -116,11 +116,20 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x]  Automatic certificate [reloading](https://opensource.com/article/22/9/dynamically-update-tls-certificates-golang-server-no-downtime) on certificate changes (e.g. renewal)
 
 4. [benchmarking](./benchmarking)
-   - []  TBD
+   - [ ]  TBD
 
 5. [profiling](./profiling/)
-   - []  TBD
+   - [ ]  TBD
 
+6. [gotests](./gotests/)
+   - [x]  Use `gotests` for automatic table test generation.
+
+7. [testcontainersdemo](./testcontainersdemo/)
+   - [x]  Use `testcontainers` to create and run tests that need external dependencies (such as DB).
+   - [x]  This helps avoid starting and stopping the containers manually for testing purposes.
+
+8. [timetest](./timetest/)
+   - [x]  Time mocking for faster testing.
 
 # Possible Improvements
 
