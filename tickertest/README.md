@@ -10,7 +10,8 @@ Write a program that will send a sample value `"OK"` on a `channel` at every `ti
 1. Handle reading from a `channel` in `for-select`.
 2. Handle `context timeout`.
 3. Handle draining (and proper closure) of `channel` after `context timeout`.
-4. Demonstrate `goroutine` ownership best practice.
+4. Dependency injection with clock usage to allow mocking in tests.
+5. Demonstrate `goroutine` ownership best practice.
    1. Owner of the `goroutine` writes to it and closes it.
    2. Consumer of the `goroutine` only reads it.
 
