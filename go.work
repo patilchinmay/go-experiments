@@ -6,6 +6,7 @@ use (
 	./go-chi-server
 	./gotests
 	./hello
+	./http-client-autorefreshtoken
 	./https-serving
 	./testcontainersdemo
 	./tickertest
