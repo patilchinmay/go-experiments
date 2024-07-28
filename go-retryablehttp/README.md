@@ -3,7 +3,7 @@
 - [go-retryablehttp](#go-retryablehttp)
   - [Description](#description)
   - [What are we building?](#what-are-we-building)
-- [Run](#run)
+  - [Run](#run)
   - [Explanation](#explanation)
   - [Reference](#reference)
 
@@ -21,7 +21,7 @@ The main difference from net/http is that requests which take a request body (PO
 
 Write a program that uses go-retryablehttp to call an api. Verify that the retries work when the api returns 5xx errors.
 
-# Run
+## Run
 
 ```bash
 go run .
