@@ -11,7 +11,7 @@ import (
 
 var (
 	retryCounter = 0
-	retryMax     = 2 // Initial request + 2 reties, so total 3 requests
+	retryMax     = 9 // Initial request + 9 reties, so total 10 requests
 )
 
 func main() {
@@ -37,11 +37,20 @@ func main() {
 	rc.RetryWaitMax = 50 * time.Millisecond
 
 	// Optional
+	// Test if retries work after substituting the HTTPClient
+	// This maybe useful if want to use a different HTTPClient
+	// Such as one with token auto-refresh capability
+	// e.g. https://github.com/patilchinmay/go-experiments/tree/master/http-client-autorefreshtoken
+	// rc.HTTPClient.Transport = http.DefaultTransport
+	// Finding: The retries work even after substituting the HTTPClient
+	rc.HTTPClient = http.DefaultClient
+
+	// Optional
 	// It's possible to convert a *retryablehttp.Client directly to a *http.Client.
 	// This makes use of retryablehttp broadly applicable with minimal effort.
-	sc := rc.StandardClient()
+	// sc := rc.StandardClient()
 
-	resp, err := sc.Get(ts.URL)
+	resp, err := rc.Get(ts.URL)
 	if err != nil {
 		log.Fatal("error in response: ", err.Error())
 	}
