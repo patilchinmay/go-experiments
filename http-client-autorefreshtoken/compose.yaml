@@ -1,0 +1,51 @@
+networks:
+  keycloak_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+
+services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-16.2}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-keycloakdb}
+      POSTGRES_USER: ${POSTGRES_USER:-keycloakdbuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-keycloakdbpassword}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U", "${POSTGRES_USER:-keycloakdbuser}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - keycloak_network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:${KC_VERSION:-25.0}
+    command: [ "start" ]
+    environment:
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin} # http://localhost:8080/admin
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-password}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-keycloakdb}
+      KC_DB_USERNAME: ${POSTGRES_USER:-keycloakdbuser}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-keycloakdbpassword}
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    networks:
+      - keycloak_network
+    restart: unless-stopped
+
+# Ref: https://medium.com/@disa2aka/docker-deployments-for-keycloak-and-postgresql-e75707b155e5
