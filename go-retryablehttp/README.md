@@ -5,6 +5,7 @@
   - [What are we building?](#what-are-we-building)
 - [Run](#run)
   - [Explanation](#explanation)
+  - [Reference](#reference)
 
 ## Description
 
@@ -41,3 +42,8 @@ The test server counts how many times it has been evoked. When the counter is le
 It can be seen from the above logs that the client automatically performed the 2 retries on receiving 500 error response.
 
 It performed a total of 3 requests including the initial request + 2 retries.
+
+## Reference
+
+- https://github.com/hashicorp/go-retryablehttp
+- http://godoc.org/github.com/hashicorp/go-retryablehttp
