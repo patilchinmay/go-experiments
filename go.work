@@ -4,6 +4,7 @@ use (
 	./cloudnativepatterns
 	./codegen/autostrada
 	./go-chi-server
+	./go-retryablehttp
 	./gotests
 	./hello
 	./http-client-autorefreshtoken
