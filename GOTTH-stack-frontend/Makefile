@@ -14,11 +14,7 @@ test:
 
 # Run Revive linter
 lint:
-	revive -config revive.toml -formatter friendly ./...
-
-# Run Revive linter with auto-fix (where possible)
-lint-fix:
-	revive -config revive.toml -formatter stylish -fix ./...
+	revive -config revive.toml -formatter stylish ./...
 
 # Install dependencies
 deps:
