@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 	"flag"
+	"io/fs"
 	"log/slog"
 	"net"
 	"os"
@@ -13,7 +14,9 @@ import (
 	"github.com/lmittmann/tint"
 	middleware "github.com/oapi-codegen/echo-middleware"
 	"github.com/patilchinmay/go-experiments/oapi-codegen-gotth/internal/handlers"
+	"github.com/patilchinmay/go-experiments/oapi-codegen-gotth/internal/views"
 	"github.com/patilchinmay/go-experiments/oapi-codegen-gotth/pkg/spec/generated"
+	"github.com/patilchinmay/go-experiments/oapi-codegen-gotth/public"
 )
 
 func main() {
@@ -72,9 +75,17 @@ func main() {
 	// OpenAPI schema.
 	e.Use(middleware.OapiRequestValidator(swagger))
 
+	// Static files
+	e.StaticFS("/public", fs.FS(public.Assets))
+
 	// We now register our petStore above as the handler for the interface
 	generated.RegisterHandlers(e, petStore)
 
+	// Home page route
+	e.GET("/", func(c echo.Context) error {
+		return views.HomePage().Render(c.Request().Context(), c.Response().Writer)
+	})
+
 	// And we serve HTTP until the world ends.
-	e.Logger.Fatal(e.Start(net.JoinHostPort("0.0.0.0", *port)))
+	e.Logger.Fatal(e.Start(net.JoinHostPort("127.0.0.1", *port)))
 }
