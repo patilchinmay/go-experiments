@@ -19,6 +19,8 @@ npm run dev
 
 # In another terminal, run the Go server with Air:
 air # OR make run
+
+# Then visit http://127.0.0.1:3000/
 ```
 
 # References
