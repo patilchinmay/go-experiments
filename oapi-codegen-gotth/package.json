@@ -4,7 +4,8 @@
   "description": "- [OAPI Codegen and GOTTH stack](#oapi-codegen-and-gotth-stack) - [Description](#description)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tailwindcss -i ./public/css/styles.css -o ./public/css/output.css --watch"
   },
   "keywords": [],
   "author": "",
