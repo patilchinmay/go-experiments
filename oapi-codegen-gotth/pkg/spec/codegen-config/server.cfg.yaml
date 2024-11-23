@@ -1,0 +1,6 @@
+package: generated
+generate:
+  echo-server: true
+  strict-server: false
+  embedded-spec: true
+output: pkg/spec/generated/server.gen.go

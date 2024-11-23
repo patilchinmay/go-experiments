@@ -1,0 +1,4 @@
+package: generated
+generate:
+  client: true
+output: pkg/spec/generated/client.gen.go
