@@ -14,6 +14,9 @@ Create a fullstack app that uses golang echo, templ, tailwind css, air and htmx.
 ```bash
 make deps
 
+# Generate the templ files
+templ generate
+
 # Start the Tailwind build process with --watch
 npm run dev
 
