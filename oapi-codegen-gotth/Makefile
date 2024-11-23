@@ -14,3 +14,8 @@ generate:
 	oapi-codegen -config pkg/spec/codegen-config/types.cfg.yaml pkg/spec/petstore-expanded.yaml
 	oapi-codegen -config pkg/spec/codegen-config/server.cfg.yaml pkg/spec/petstore-expanded.yaml
 	oapi-codegen -config pkg/spec/codegen-config/client.cfg.yaml pkg/spec/petstore-expanded.yaml
+
+# Run Revive linter
+.PHONY: lint
+lint:
+	revive -config revive.toml -formatter stylish ./...
