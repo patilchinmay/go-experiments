@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/labstack/echo/v4"
+	"github.com/patilchinmay/go-experiments/oapi-codegen-gotth/internal/views"
 	"github.com/patilchinmay/go-experiments/oapi-codegen-gotth/pkg/spec/generated"
 )
 
@@ -34,7 +35,8 @@ func sendPetStoreError(ctx echo.Context, code int, message string) error {
 	return err
 }
 
-// FindPets implements all the handlers in the ServerInterface
+// PetStore implements all the handlers in the ServerInterface
+// GET /pets
 func (p *PetStore) FindPets(ctx echo.Context, params generated.FindPetsParams) error {
 	p.Lock.Lock()
 	defer p.Lock.Unlock()
@@ -62,6 +64,13 @@ func (p *PetStore) FindPets(ctx echo.Context, params generated.FindPetsParams) e
 			}
 		}
 	}
+
+	// Check if request is from HTMX
+	if ctx.Request().Header.Get("HX-Request") == "true" {
+		return views.PetList(result).Render(ctx.Request().Context(), ctx.Response().Writer)
+	}
+
+	// Return JSON for API clients
 	return ctx.JSON(http.StatusOK, result)
 }
 
@@ -88,6 +97,11 @@ func (p *PetStore) AddPet(ctx echo.Context) error {
 	// Insert into map
 	p.Pets[pet.Id] = pet
 
+	// Handle HTMX request
+	if ctx.Request().Header.Get("HX-Request") == "true" {
+		return views.PetCard(pet).Render(ctx.Request().Context(), ctx.Response().Writer)
+	}
+
 	// Now, we have to return the NewPet
 	err = ctx.JSON(http.StatusCreated, pet)
 	if err != nil {
@@ -113,6 +127,12 @@ func (p *PetStore) FindPetByID(ctx echo.Context, petId int64) error {
 		return sendPetStoreError(ctx, http.StatusNotFound,
 			fmt.Sprintf("Could not find pet with ID %d", petId))
 	}
+
+	// Handle HTMX request
+	if ctx.Request().Header.Get("HX-Request") == "true" {
+		return views.PetDetail(pet).Render(ctx.Request().Context(), ctx.Response().Writer)
+	}
+
 	return ctx.JSON(http.StatusOK, pet)
 }
 
@@ -126,5 +146,13 @@ func (p *PetStore) DeletePet(ctx echo.Context, id int64) error {
 			fmt.Sprintf("Could not find pet with ID %d", id))
 	}
 	delete(p.Pets, id)
+
+	// Handle HTMX request
+	if ctx.Request().Header.Get("HX-Request") == "true" {
+		// Send empty response with HX-Trigger
+		ctx.Response().Header().Set("HX-Trigger", fmt.Sprintf("petDeleted-%d", id))
+		return ctx.NoContent(http.StatusOK)
+	}
+
 	return ctx.NoContent(http.StatusNoContent)
 }
