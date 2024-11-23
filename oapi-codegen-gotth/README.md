@@ -1,9 +1,11 @@
 # OAPI Codegen and GOTTH stack
 
 - [OAPI Codegen and GOTTH stack](#oapi-codegen-and-gotth-stack)
-- [Description](#description)
+  - [Description](#description)
+  - [Run](#run)
+  - [References:](#references)
 
-# Description
+## Description
 
 This repo demonstrates spec first development.
 
@@ -21,6 +23,19 @@ Key points about this setup:
 
 For this example we will use the sample spec [petstore-expanded](https://github.com/oapi-codegen/oapi-codegen/blob/main/examples/petstore-expanded/petstore-expanded.yaml) from oapi.
 
+## Run
 
-References:
+```bash
+make deps
+
+make run
+```
+
+Then open http://localhost:3000/ui.
+
+The API can be interacted with by using postman.
+
+Single backend serves both UI and API.
+
+## References:
 - https://github.com/oapi-codegen/oapi-codegen/tree/main
