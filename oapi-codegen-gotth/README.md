@@ -20,3 +20,7 @@ Key points about this setup:
 - Single backend serves both Web and CLI clients.
 
 For this example we will use the sample spec [petstore-expanded](https://github.com/oapi-codegen/oapi-codegen/blob/main/examples/petstore-expanded/petstore-expanded.yaml) from oapi.
+
+
+References:
+- https://github.com/oapi-codegen/oapi-codegen/tree/main
