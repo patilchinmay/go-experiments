@@ -1,0 +1,83 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: check-added-large-files
+
+    # ==========================================================================
+    # Golang Pre-Commit Hooks | https://github.com/tekwizely/pre-commit-golang
+    #
+    # !! ALL Hooks enabled by default - Comment out hooks you are not using
+    #
+    # Visit the project home page to learn more about the available Hooks,
+    # including useful arguments you might want to pass into them.
+    #
+    # NOTE: When passing options to hooks, if your options contain a reference
+    #       to an existing file, then you will need to use a trailing '--'
+    #       argument to separate the hook options from the modified-file list
+    #       that Pre-Commit passes into the hook.
+    #       For repo-based hooks, '--' is not needed.
+    #
+    # NOTE: You can pass environment variables to hooks using args with the
+    #       following format:
+    #
+    #           --hook:env:NAME=VALUE
+    #
+    # Consider adding aliases to longer-named hooks for easier CLI usage.
+    # ==========================================================================
+  - repo: https://github.com/tekwizely/pre-commit-golang
+    rev: v1.0.0-rc.1
+    hooks:
+      # - id: go-mod-tidy
+      # - id: go-vet
+      - id: go-revive
+        args: ["-formatter", "stylish"]
+      # - id: go-returns # replaces go-imports & go-fmt
+      # - id: go-critic
+
+  # Security
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.16.3
+    hooks:
+      - id: gitleaks
+        exclude: ^codegen/autostrada/
+
+  # Yaml
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.31.0
+    hooks:
+      - id: yamllint
+        args:
+          - "--no-warnings"
+          - "-d {rules: {line-length: {max: 80, level: warning}, brackets: {max-spaces-inside: 1}},extends: default}"
+
+  # Dockerfile
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.10.0
+    hooks:
+      - id: hadolint
+        args: ["--ignore=DL3018", "--ignore=DL3008", "--ignore=DL3013"]
+
+  # Spellcheck
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.4
+    hooks:
+      - id: codespell
+
+  # - repo: https://github.com/igorshubovych/markdownlint-cli
+  #   rev: v0.41.0
+  #   hooks:
+  #     - id: markdownlint
+  #       args: [--disable=MD013]
