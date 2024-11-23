@@ -4,7 +4,8 @@
   "description": "- [GOTTH Stack Frontend](#gotth-stack-frontend) - [Description](#description) - [References](#references)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tailwindcss -i ./public/css/styles.css -o ./public/css/output.css --watch"
   },
   "keywords": [],
   "author": "",
