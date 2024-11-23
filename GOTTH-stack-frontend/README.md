@@ -15,7 +15,7 @@ Create a fullstack app that uses golang echo, templ, tailwind css, air and htmx.
 make deps
 
 # Generate the templ files
-templ generate
+templ generate # OR templ generate -watch
 
 # Start the Tailwind build process with --watch
 npm run dev
@@ -27,6 +27,8 @@ air # OR make run
 ```
 
 # References
+- https://callistaenterprise.se/blogg/teknik/2024/01/08/htmx-with-go-templ/
+  - https://github.com/eriklupander/questions-admin-app
 - https://templ.guide/quick-start/installation/
 - https://github.com/mgechev/revive?tab=readme-ov-file#installation
 - https://echo.labstack.com/docs/quick-start
