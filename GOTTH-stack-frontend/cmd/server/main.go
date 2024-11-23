@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"io/fs"
 	"log/slog"
 	"os"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/lmittmann/tint"
 
 	"github.com/patilchinmay/go-experiments/gotth-stack-frontend/internal/handlers"
+	"github.com/patilchinmay/go-experiments/gotth-stack-frontend/public"
 )
 
 func main() {
@@ -42,7 +44,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Static files
-	e.Static("/public", "public")
+	e.StaticFS("/public", fs.FS(public.Assets))
 
 	// Routes
 	e.GET("/", handlers.Home)
