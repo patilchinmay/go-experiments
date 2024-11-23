@@ -1,6 +1,7 @@
-go 1.22.5
+go 1.23.2
 
 use (
+	./GOTTH-stack-frontend
 	./cloudnativepatterns
 	./codegen/autostrada
 	./go-chi-server
@@ -9,6 +10,7 @@ use (
 	./hello
 	./http-client-autorefreshtoken
 	./https-serving
+	./oapi-codegen-gotth
 	./testcontainersdemo
 	./tickertest
 	./timetest
