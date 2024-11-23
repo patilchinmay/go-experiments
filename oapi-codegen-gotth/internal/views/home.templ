@@ -1,0 +1,66 @@
+package views
+
+templ HomePage() {
+	@Layout() {
+		<div class="space-y-6">
+			<div class="bg-white shadow rounded-lg p-6">
+				<h2 class="text-xl font-semibold mb-4">Add New Pet</h2>
+				@AddPetForm()
+			</div>
+			<div class="bg-white shadow rounded-lg p-6">
+				<div class="flex justify-between items-center mb-4">
+					<h2 class="text-xl font-semibold">Pets List</h2>
+					<div class="space-x-2">
+						<input
+							type="text"
+							name="search"
+							placeholder="Search pets..."
+							class="rounded-md border-gray-300 shadow-sm"
+							hx-get="/pets"
+							hx-trigger="keyup changed delay:500ms"
+							hx-target="#pet-list"
+						/>
+						<select
+							name="tag"
+							class="rounded-md border-gray-300 shadow-sm"
+							hx-get="/pets"
+							hx-trigger="change"
+							hx-target="#pet-list"
+						>
+							<option value="">All Tags</option>
+							<option value="dog">Dogs</option>
+							<option value="cat">Cats</option>
+							<option value="bird">Birds</option>
+						</select>
+					</div>
+				</div>
+				<div
+					id="pet-list"
+					hx-get="/pets"
+					hx-trigger="load"
+					class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+				>
+					<!-- Pet list will be loaded here -->
+				</div>
+			</div>
+			<div
+				id="pet-detail-modal"
+				class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+			>
+				<div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+					<div id="pet-detail">
+						<!-- Pet details will be loaded here -->
+					</div>
+					<div class="mt-4">
+						<button
+							class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+							onclick="document.getElementById('pet-detail-modal').classList.add('hidden')"
+						>
+							Close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}

@@ -1,0 +1,101 @@
+package views
+
+import (
+	"fmt"
+	"github.com/patilchinmay/go-experiments/oapi-codegen-gotth/pkg/spec/generated"
+)
+
+templ AddPetForm() {
+	<form
+		id="add-pet-form"
+		class="space-y-4"
+		hx-post="/pets"
+		hx-target="#pet-list"
+		hx-swap="beforeend"
+		hx-ext="json-enc"
+		hx-trigger="submit"
+	>
+		<div>
+			<label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+			<input
+				type="text"
+				id="name"
+				name="name"
+				required
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+			/>
+		</div>
+		<div>
+			<label for="tag" class="block text-sm font-medium text-gray-700">Tag</label>
+			<input
+				type="text"
+				id="tag"
+				name="tag"
+				class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+			/>
+		</div>
+		<button
+			type="submit"
+			class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+		>
+			Add Pet
+		</button>
+	</form>
+}
+
+templ PetCard(pet generated.Pet) {
+	<div id={ fmt.Sprintf("pet-%d", pet.Id) } class="border rounded-lg p-4 shadow-sm">
+		<h3 class="text-lg font-semibold">{ pet.Name }</h3>
+		if pet.Tag != nil {
+			<span class="inline-block bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm">
+				{ *pet.Tag }
+			</span>
+		}
+		<div class="mt-4 flex justify-between">
+			<button
+				class="text-blue-600 hover:text-blue-800"
+				hx-get={ fmt.Sprintf("/pets/%d", pet.Id) }
+				hx-target="#pet-detail"
+				onclick="document.getElementById('pet-detail-modal').classList.remove('hidden')"
+			>
+				View Details
+			</button>
+			<button
+				class="text-red-600 hover:text-red-800"
+				hx-delete={ fmt.Sprintf("/pets/%d", pet.Id) }
+				hx-target={ fmt.Sprintf("#pet-%d", pet.Id) }
+				hx-confirm="Are you sure you want to delete this pet?"
+				hx-swap="outerHTML"
+			>
+				Delete
+			</button>
+		</div>
+	</div>
+}
+
+// Updated pet list template with API prefix
+templ PetList(pets []generated.Pet) {
+	<div id="pet-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+		for _, pet := range pets {
+			@PetCard(pet)
+		}
+	</div>
+}
+
+// Updated pet detail template (no changes needed for API prefix)
+templ PetDetail(pet generated.Pet) {
+	<div id="pet-detail" class="p-4">
+		<h2 class="text-2xl font-bold mb-4">{ pet.Name }</h2>
+		<div class="mb-4">
+			<strong>ID:</strong> { fmt.Sprint(pet.Id) }
+		</div>
+		if pet.Tag != nil {
+			<div class="mb-4">
+				<strong>Tag:</strong>
+				<span class="ml-2 bg-blue-100 text-blue-800 rounded-full px-3 py-1">
+					{ *pet.Tag }
+				</span>
+			</div>
+		}
+	</div>
+}
