@@ -131,7 +131,15 @@ Each repository has a README.md with description, relevant details to setup and 
 8. [timetest](./timetest/)
    - [x]  Time mocking for faster testing.
 
-9. [oapi-codegen-keycloak-oidc](./oapi-codegen-keycloak-oidc/)
+9. [oapi-codegen-gotth](./oapi-codegen-gotth/)
+   - [x]  GOTTH Stack Implementation (Go + OpenAPI + Templ + TailwindCSS + HTMX)
+   - [x]  Spec-First Development using OpenAPI as single source of truth
+   - [x]  **Dual Response Format: Same handlers serve HTML for HTMX requests and JSON for API clients**
+   - [x]  Code Generation: Server/client from OpenAPI spec, type-safe HTML templates, CSS compilation
+   - [x]  Modern Frontend: Dynamic interactions using HTMX without JavaScript frameworks
+   - [x]  Single Binary Deployment with embedded static assets and comprehensive validation
+
+10. [oapi-codegen-keycloak-oidc](./oapi-codegen-keycloak-oidc/)
    - [x]  Creating `OpenAPI` specs with `OIDC` security definitions.
    - [x]  Using `oapi-codegen` to generate type-safe Go server code.
    - [x]  Configuring `Keycloak` for OIDC authentication.
