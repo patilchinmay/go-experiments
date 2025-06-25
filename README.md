@@ -131,6 +131,13 @@ Each repository has a README.md with description, relevant details to setup and 
 8. [timetest](./timetest/)
    - [x]  Time mocking for faster testing.
 
+9. [oapi-codegen-keycloak-oidc](./oapi-codegen-keycloak-oidc/)
+   - [x]  Creating `OpenAPI` specs with `OIDC` security definitions.
+   - [x]  Using `oapi-codegen` to generate type-safe Go server code.
+   - [x]  Configuring `Keycloak` for OIDC authentication.
+   - [x]  Implementing `JWKS`-based token validation with caching in Go.
+   - [x]  Enforcing fine-grained permissions using JWT claims (`AuthN and AuthZ`).
+
 # Possible Improvements
 
 - [ ] Config loading
