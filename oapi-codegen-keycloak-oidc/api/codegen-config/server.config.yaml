@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/v2.4.1/configuration-schema.json
+package: spec
+output: ./api/spec/server.gen.go # relative to root
+generate:
+  echo-server: true
+  strict-server: false
+  embedded-spec: true
+# output-options:
+#   exclude-operation-ids:
+#     - healthCheck
