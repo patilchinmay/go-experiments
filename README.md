@@ -137,14 +137,14 @@ Each repository has a README.md with description, relevant details to setup and 
    - [x]  **Dual Response Format: Same handlers serve HTML for HTMX requests and JSON for API clients**
    - [x]  Code Generation: Server/client from OpenAPI spec, type-safe HTML templates, CSS compilation
    - [x]  Modern Frontend: Dynamic interactions using HTMX without JavaScript frameworks
-   - [x]  Single Binary Deployment with embedded static assets and comprehensive validation
+   - [x]  Single Binary Deployment with embedded static assets and comprehensive validation.
 
 10. [oapi-codegen-keycloak-oidc](./oapi-codegen-keycloak-oidc/)
-   - [x]  Creating `OpenAPI` specs with `OIDC` security definitions.
-   - [x]  Using `oapi-codegen` to generate type-safe Go server code.
-   - [x]  Configuring `Keycloak` for OIDC authentication.
-   - [x]  Implementing `JWKS`-based token validation with caching in Go.
-   - [x]  Enforcing fine-grained permissions using JWT claims (`AuthN and AuthZ`).
+    - [x]  Creating `OpenAPI` specs with `OIDC` security definitions.
+    - [x]  Using `oapi-codegen` to generate type-safe Go server code.
+    - [x]  Configuring `Keycloak` for OIDC authentication.
+    - [x]  Implementing `JWKS`-based token validation with caching in Go.
+    - [x]  Enforcing fine-grained permissions using JWT claims (`AuthN and AuthZ`).
 
 # Possible Improvements
 
